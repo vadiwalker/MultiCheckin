@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -19,9 +20,17 @@ import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
 
+    enum Step{
+        STEP_1,
+        STEP_2
+    }
+
+    private Step currentStep;
+
     private View[] step1, step2;
 
     private ImageView imageView;
+    private EditText commentText;
 
     private static final int REQUEST_PICTURE_CAPTURE = 1;
     private static final int REQUEST_PICTURE_FROM_FILE = 2;
@@ -53,10 +62,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        switch (currentStep){
+            case STEP_1:
+                super.onBackPressed();
+                break;
+            case STEP_2:
+                undoStep2(null);
+                break;
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        commentText = (EditText) findViewById(R.id.commentText);
         imageView = (ImageView)  findViewById(R.id.step2_image);
 
         step1 = new View[4];
@@ -84,6 +106,8 @@ public class MainActivity extends AppCompatActivity {
     public void selectPhotoFromFile(View v){
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         if (intent.resolveActivity(getPackageManager()) == null) {
             Toast errorToast = Toast.makeText(getBaseContext(), R.string.step1_nofile, Toast.LENGTH_SHORT);
             errorToast.show();
@@ -114,9 +138,11 @@ public class MainActivity extends AppCompatActivity {
         for (View view: step2) {
             view.setVisibility(View.VISIBLE);
         }
+        currentStep = Step.STEP_2;
     }
 
     public void undoStep2(View v){
+        currentStep = Step.STEP_1;
         for (View view: step1) {
             view.setVisibility(View.VISIBLE);
         }
