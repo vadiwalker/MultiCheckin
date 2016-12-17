@@ -2,6 +2,8 @@ package ru.ifmo.droid2016.korchagin.multicheckin;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.vk.sdk.VKSdk;
 
 /**
@@ -13,5 +15,10 @@ public class MainApplication extends Application {
     public void onCreate() {
         super.onCreate();
         VKSdk.initialize(getApplicationContext());
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(this);
+
+
     }
 }
