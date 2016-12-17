@@ -9,12 +9,15 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.vk.sdk.util.VKUtil;
 
 import java.io.IOException;
 
@@ -94,6 +97,11 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
+        Log.e("CERT", fingerprints[0]);
+        Toast t = Toast.makeText(getBaseContext(), fingerprints[0], Toast.LENGTH_LONG);
+        t.show();
     }
 
     @Override
