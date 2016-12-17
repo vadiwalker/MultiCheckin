@@ -7,4 +7,6 @@
     <string name="hint1_camera">Camera</string>
     <string name="step1_or">or</string>
     <string name="step2_undo">undo</string>
+    <string name="step1_nocamera">Sorry, your device does not have a working camera</string>
+    <string name="step1_nofile">Unable to select image</string>
 </resources>

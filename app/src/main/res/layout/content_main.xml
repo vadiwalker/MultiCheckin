@@ -21,13 +21,13 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:id="@+id/commentText"
-        android:hint="@string/step2_hint" />
+        android:hint="@string/step2_hint"
+        android:id="@+id/commentText" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView"
+        android:id="@+id/step2_image"
         android:layout_above="@+id/commentText"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
@@ -39,24 +39,26 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView" />
+        android:id="@+id/step1_textOr" />
 
     <Button
         android:text="@string/hint1_camera"
+        android:onClick="selectPhotoFromCamera"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/textView"
-        android:layout_toStartOf="@+id/textView"
+        android:layout_toLeftOf="@+id/step1_textOr"
+        android:layout_toStartOf="@+id/step1_textOr"
         android:id="@+id/select_camera" />
 
     <Button
         android:text="@string/hint1_file"
+        android:onClick="selectPhotoFromFile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/select_camera"
-        android:layout_toRightOf="@+id/textView"
-        android:layout_toEndOf="@+id/textView"
+        android:layout_toRightOf="@+id/step1_textOr"
+        android:layout_toEndOf="@+id/step1_textOr"
         android:id="@+id/select_file" />
 
     <TextView
@@ -65,16 +67,17 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/select_camera"
         android:layout_centerHorizontal="true"
-        android:id="@+id/textView2"/>
+        android:id="@+id/step1_hint"/>
 
     <Button
         android:text="@string/step2_undo"
+        android:onClick="undoStep2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/commentText"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:id="@+id/button_undo"
+        android:id="@+id/step2_undo"
         android:visibility="invisible" />
 
 </RelativeLayout>
