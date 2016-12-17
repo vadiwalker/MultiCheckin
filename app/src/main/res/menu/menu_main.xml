@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ru.ifmo.droid2016.korchagin.multicheckin.MainActivity">
     <item
+        android:id="@+id/services_settings"
+        android:title="@string/services_settings"/>
+
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"

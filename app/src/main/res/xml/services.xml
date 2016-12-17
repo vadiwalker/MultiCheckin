@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+        android:defaultValue="false"
+        android:title="VK"
+        android:key="pref_vk" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:title="Facebook"
+        android:key="pref_fb" />
+</PreferenceScreen>

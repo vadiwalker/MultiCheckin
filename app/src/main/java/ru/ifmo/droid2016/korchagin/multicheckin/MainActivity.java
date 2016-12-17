@@ -1,10 +1,12 @@
 package ru.ifmo.droid2016.korchagin.multicheckin;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,7 +23,7 @@ import com.vk.sdk.util.VKUtil;
 
 import java.io.IOException;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener  {
 
     enum Step{
         STEP_1,
@@ -102,6 +104,11 @@ public class MainActivity extends AppCompatActivity {
         Log.e("CERT", fingerprints[0]);
         Toast t = Toast.makeText(getBaseContext(), fingerprints[0], Toast.LENGTH_LONG);
         t.show();
+
+
+        SharedPreferences prefs =
+                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        prefs.registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -167,11 +174,29 @@ public class MainActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id){
+            case R.id.services_settings :
+                Intent intent = new Intent();
+                intent.setClassName(this, "ru.ifmo.droid2016.korchagin.multicheckin.ServicesActivity");
+                startActivity(intent);
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        switch (key){
+            case "pref_vk":
+                Log.e("TTX", "VKFLIP");
+                // TODO : сделать логин VK и вообще
+                break;
+            case "pref_fb":
+                Log.e("TTX", "FBFLIP");
+                // TODO : что-то делать тебе, Влад
+                break;
+        }
+    }
+
 }

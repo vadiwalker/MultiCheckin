@@ -10,4 +10,5 @@
     <string name="step2_undo">undo</string>
     <string name="step1_nocamera">Sorry, your device does not have a working camera</string>
     <string name="step1_nofile">Unable to select image</string>
+    <string name="services_settings">Services settings</string>
 </resources>
