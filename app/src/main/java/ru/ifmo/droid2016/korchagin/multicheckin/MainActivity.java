@@ -19,11 +19,17 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
 import com.vk.sdk.util.VKUtil;
 
 import java.io.IOException;
 
+import ru.ifmo.droid2016.korchagin.multicheckin.integration.FacebookIntegration;
+
 public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener  {
+
+    static final String LOG_TAG_DEBUG_FACEBOOK = "facebook_integration";
 
     enum Step{
         STEP_1,
@@ -40,12 +46,25 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     private static final int REQUEST_PICTURE_CAPTURE = 1;
     private static final int REQUEST_PICTURE_FROM_FILE = 2;
 
+
+    private CallbackManager facebookCallbackManager;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(LOG_TAG_DEBUG_FACEBOOK, "onActivityResult " + requestCode + " " + resultCode);
+
+        if (facebookCallbackManager.onActivityResult(requestCode, resultCode, data)) {
+            Log.d(LOG_TAG_DEBUG_FACEBOOK, "OK");
+
+            return;
+        }
+
         if(resultCode != RESULT_OK){
             return;
         }
+
         switch (requestCode) {
             case REQUEST_PICTURE_CAPTURE :
                 Bundle extras = data.getExtras();
@@ -109,6 +128,9 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(this);
+
+
+        facebookCallbackManager =  FacebookIntegration.init(this);
     }
 
     @Override
@@ -118,7 +140,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         return true;
     }
 
-    public void selectPhotoFromFile(View v){
+    public void selectPhotoFromFile(View v) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -195,6 +217,14 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
             case "pref_fb":
                 Log.e("TTX", "FBFLIP");
                 // TODO : что-то делать тебе, Влад
+
+                if (AccessToken.getCurrentAccessToken() == null) {
+                    Log.d("facebook_integration", "start");
+                    FacebookIntegration.login();
+                } else {
+                    FacebookIntegration.unLogin();
+                }
+
                 break;
         }
     }
