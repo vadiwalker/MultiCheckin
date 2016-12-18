@@ -208,7 +208,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         switch (id){
             case R.id.services_settings :
                 Intent intent = new Intent();
-                intent.setClassName(this, "ru.ifmo.droid2016.korchagin.multicheckin.ServicesActivity");
+                intent.setClassName(this, "ru.ifmo.droid2016.korchagin.multicheckin.integration.IntegrationActivity");
                 startActivity(intent);
                 return true;
         }

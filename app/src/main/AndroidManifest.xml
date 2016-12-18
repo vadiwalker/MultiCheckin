@@ -2,17 +2,22 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ru.ifmo.droid2016.korchagin.multicheckin">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-feature android:name="android.hardware.camera" />
 
+    <provider
+        android:name="com.facebook.FacebookContentProvider"
+        android:authorities="@string/provider_authorities"
+        android:exported="true" />
 
     <application
+        android:name=".MainApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
-        android:name=".MainApplication">
+        android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -25,19 +30,17 @@
         </activity>
         <activity
             android:name=".ServicesActivity"
-            android:label="Preferences"/>
+            android:label="Preferences" />
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
 
-        <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
 
+        <activity android:name=".integration.IntegrationActivity"></activity>
     </application>
-
-    <provider android:authorities="@string/provider_authorities"
-        android:name="com.facebook.FacebookContentProvider"
-        android:exported="true" />
-
 
 </manifest>

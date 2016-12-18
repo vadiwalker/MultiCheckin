@@ -4,7 +4,8 @@
     <SwitchPreference
         android:defaultValue="false"
         android:title="VK"
-        android:key="pref_vk" />
+        android:key="pref_vk"
+        android:icon="@mipmap/ic_vk"/>
     <SwitchPreference
         android:defaultValue="false"
         android:title="Facebook"

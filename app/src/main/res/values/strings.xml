@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Multi Checkin</string>
-    <integer name="com_vk_sdk_AppId">5778137</integer>
 
     <string name="facebook_app_id">752889364866992</string>
 
