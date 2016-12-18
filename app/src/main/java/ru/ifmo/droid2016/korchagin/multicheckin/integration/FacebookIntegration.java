@@ -1,7 +1,9 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.integration;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -19,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FacebookIntegration implements SocialIntegration{
-    static final String LOG_TAG = "facebook_integration";
+    private static final String LOG_TAG = "facebook_integration";
 
     private static IntegrationActivity activity;
 
@@ -103,13 +105,14 @@ public class FacebookIntegration implements SocialIntegration{
     }
 
     @Override
-    public Bitmap getIcon() {
+    public Drawable getIcon() {
         return null;
     }
 
     @Override
+    @NonNull
     public String getName() {
-        return "Вконтакте";
+        return "Фейсбук";
     }
 
     @Override

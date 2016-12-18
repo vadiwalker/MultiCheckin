@@ -1,6 +1,7 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.utils;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -64,12 +65,12 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
 
     @Override
     public void onBindViewHolder(final MRecyclerAdapter.ViewHolder holder, final int position) {
-        Bitmap mBitmap = socialNetworks.elementAt(position).getIcon();
+        Drawable mIcon = socialNetworks.elementAt(position).getIcon();
 
         Log.d("MRecyclerAdapter", String.valueOf(position));
 
-        if (mBitmap != null) {
-            holder.iconOfNetwork.setImageBitmap(mBitmap);
+        if (mIcon != null) {
+            holder.iconOfNetwork.setImageDrawable(mIcon);
         }
 
         holder.nameOfNetwork.setText(socialNetworks.elementAt(position).getName());
