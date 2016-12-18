@@ -78,7 +78,7 @@ public class FacebookIntegration implements SocialIntegration{
                         activity.sendBroadcast(
                                 new Intent(
                                         IntegrationActivity.NEW_NETWORK_IS_LOGGED)
-                                        .putExtra(IntegrationActivity.NETWORK_NAME, "Вконтакте")
+                                        .putExtra(IntegrationActivity.NETWORK_NAME, "Фейсбук")
                         );
                     }
                 }
