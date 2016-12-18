@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
-import android.support.annotation.BoolRes;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -35,9 +34,9 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
 
     private Button debug_facebook_button;
 
-    public void onClickDebugFacebookButton(View view) {
-        FacebookIntegration.testRequest();
-    }
+//    public void onClickDebugFacebookButton(View view) {
+//        FacebookIntegration.testRequest();
+//    }
 
     enum Step{
         STEP_1,
@@ -55,19 +54,10 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     private static final int REQUEST_PICTURE_FROM_FILE = 2;
 
 
-    private CallbackManager facebookCallbackManager;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d(LOG_TAG_DEBUG_FACEBOOK, "onActivityResult " + requestCode + " " + resultCode);
-
-        if (facebookCallbackManager.onActivityResult(requestCode, resultCode, data)) {
-            Log.d(LOG_TAG_DEBUG_FACEBOOK, "OK");
-
-            return;
-        }
 
         if(resultCode != RESULT_OK){
             return;
@@ -91,10 +81,16 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
                 }
                 break;
         }
+
     }
 
     @Override
     public void onBackPressed() {
+        if (currentStep == null) {
+            // TODO один раз здесь у меня появился null, кому-нибудь надо разобраться (исходно if-а не было)
+            return;
+        }
+
         switch (currentStep){
             case STEP_1:
                 super.onBackPressed();
@@ -138,8 +134,11 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         prefs.registerOnSharedPreferenceChangeListener(this);
 
 
-        facebookCallbackManager =  FacebookIntegration.init(this);
+
+        //facebookCallbackManager =  FacebookIntegration.init(this);
         debug_facebook_button = (Button)findViewById(R.id.debug_facebook_button);
+
+
     }
 
     @Override
@@ -226,14 +225,6 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
             case "pref_fb":
                 Log.e("TTX", "FBFLIP");
                 // TODO : что-то делать тебе, Влад
-
-                if (AccessToken.getCurrentAccessToken() == null) {
-                    Log.d("facebook_integration", "start");
-                    FacebookIntegration.login();
-                } else {
-                    FacebookIntegration.unLogin();
-                }
-
                 break;
         }
     }

@@ -1,4 +1,6 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.integration;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -6,28 +8,22 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
-import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
-import ru.ifmo.droid2016.korchagin.multicheckin.MainActivity;
-
-public class FacebookIntegration {
+public class FacebookIntegration implements SocialIntegration{
     static final String LOG_TAG = "facebook_integration";
 
-    private static MainActivity activity;
+    private static IntegrationActivity activity;
 
-    public static void testRequest() {
-
+    public void testRequest() {
         if (AccessToken.getCurrentAccessToken() == null) {
             Log.d(LOG_TAG, "int testRequest no AccessToken");
             return;
@@ -49,8 +45,7 @@ public class FacebookIntegration {
         request.executeAsync();
     }
 
-
-    public static CallbackManager init(MainActivity newActivity) {
+    public static CallbackManager init(IntegrationActivity newActivity) {
         activity = newActivity;
         CallbackManager facebookCallbackManager;
 
@@ -58,11 +53,13 @@ public class FacebookIntegration {
 
         LoginManager.getInstance().registerCallback(facebookCallbackManager,
                 new FacebookCallback<LoginResult>() {
+
                     @Override
                     public void onSuccess(LoginResult loginResult) {
                         Log.d(LOG_TAG, "Залогинились успешно.");
 
                         AccessToken.setCurrentAccessToken(loginResult.getAccessToken());
+                        sendBroadcast();
                     }
 
                     @Override
@@ -74,15 +71,23 @@ public class FacebookIntegration {
                     public void onError(FacebookException error) {
                         Log.d(LOG_TAG, "Ошибка : " + error.getMessage());
                     }
+
+                    void sendBroadcast() {
+                        activity.sendBroadcast(
+                                new Intent(
+                                        IntegrationActivity.NEW_NETWORK_IS_LOGGED)
+                                        .putExtra(IntegrationActivity.NETWORK_NAME, "Вконтакте")
+                        );
+                    }
                 }
         );
-
         return facebookCallbackManager;
     }
 
     private static List permissions = Arrays.asList("public_profile", "user_friends");
 
-    public static void login() {
+    @Override
+    public void login() {
         if ((activity == null) || (activity.isFinishing())) {
             Log.d(LOG_TAG, "Кто-то набажил : (activity == null) || (activity.isFinishing()) ");
             return;
@@ -91,10 +96,26 @@ public class FacebookIntegration {
         LoginManager.getInstance().logInWithReadPermissions(activity, permissions);
     }
 
-    public static void unLogin() {
+    @Override
+    public void logout() {
         AccessToken.setCurrentAccessToken(null);
         Log.d(LOG_TAG, "unlogin");
     }
 
+    @Override
+    public Bitmap getIcon() {
+        return null;
+    }
+
+    @Override
+    public String getName() {
+        return "Вконтакте";
+    }
+
+    @Override
+    public boolean getStatus() {
+        Log.d(LOG_TAG, String.valueOf((AccessToken.getCurrentAccessToken() != null)));
+        return (AccessToken.getCurrentAccessToken() != null);
+    }
 
 }
