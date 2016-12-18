@@ -32,8 +32,7 @@ public interface SocialIntegration {
     @NonNull String getName();
 
     /**
-     * No idea on this one
-     * @return Something
+     *  This method should return true if there is exists saved asses token, and false otherwise.
      */
     boolean getStatus();
 }
