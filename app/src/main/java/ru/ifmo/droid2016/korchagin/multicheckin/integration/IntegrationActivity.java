@@ -75,6 +75,8 @@ public class IntegrationActivity extends AppCompatActivity {
 
         networks.addElement(new FacebookIntegration());
 
+        networks.addElement(VKIntegration.getInstance());
+
         // TODO  добавить сюда все Integration-ы
 
         mAdapter = new MRecyclerAdapter(networks, posInAdapter);
@@ -91,13 +93,15 @@ public class IntegrationActivity extends AppCompatActivity {
         initRecyclerView();
         initReceivers();
 
+        VKIntegration.getInstance().updateActivityReference(this);
+
         facebookCallbackManager = FacebookIntegration.init(this);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        VKIntegration.getInstance().tryLoginFinish(requestCode, resultCode, data);
         if (facebookCallbackManager.onActivityResult(requestCode, resultCode, data)) {
             Log.d(LOG_TAG, "OK");
             return;
