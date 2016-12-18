@@ -1,4 +1,5 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.integration;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.facebook.AccessToken;
@@ -25,7 +26,12 @@ public class FacebookIntegration {
 
     private static MainActivity activity;
 
-    private static void testRequest() {
+    public static void testRequest() {
+
+        if (AccessToken.getCurrentAccessToken() == null) {
+            Log.d(LOG_TAG, "int testRequest no AccessToken");
+            return;
+        }
 
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
@@ -37,7 +43,10 @@ public class FacebookIntegration {
                 }
         );
 
-
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id,name,link");
+        request.setParameters(parameters);
+        request.executeAsync();
     }
 
 
