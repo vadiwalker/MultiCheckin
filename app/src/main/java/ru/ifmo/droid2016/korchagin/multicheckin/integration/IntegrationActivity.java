@@ -73,8 +73,7 @@ public class IntegrationActivity extends AppCompatActivity {
 
         Vector<SocialIntegration> networks = new Vector<>();
 
-        networks.addElement(new FacebookIntegration());
-
+        networks.addElement(FacebookIntegration.getmInstance());
         networks.addElement(VKIntegration.getInstance());
 
         // TODO  добавить сюда все Integration-ы
@@ -95,7 +94,7 @@ public class IntegrationActivity extends AppCompatActivity {
 
         VKIntegration.getInstance().updateActivityReference(this);
 
-        facebookCallbackManager = FacebookIntegration.init(this);
+        facebookCallbackManager = FacebookIntegration.getmInstance().init(this);
     }
 
     @Override
@@ -107,7 +106,6 @@ public class IntegrationActivity extends AppCompatActivity {
             return;
         }
     }
-
 
     @Override
     public void onDestroy() {

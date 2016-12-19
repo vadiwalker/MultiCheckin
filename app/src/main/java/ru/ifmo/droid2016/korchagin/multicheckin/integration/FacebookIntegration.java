@@ -1,4 +1,5 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.integration;
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -17,13 +18,27 @@ import com.facebook.login.LoginResult;
 
 import org.json.JSONObject;
 
+import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
+
+import ru.ifmo.droid2016.korchagin.multicheckin.R;
 
 public class FacebookIntegration implements SocialIntegration{
     private static final String LOG_TAG = "facebook_integration";
 
-    private static IntegrationActivity activity;
+    private WeakReference<Activity> weakActivity;
+
+    private static FacebookIntegration mInstance;
+
+    public static FacebookIntegration getmInstance() {
+        if (mInstance != null) {
+            return mInstance;
+        } else {
+            mInstance = new FacebookIntegration();
+            return mInstance;
+        }
+    }
 
     public void testRequest() {
         if (AccessToken.getCurrentAccessToken() == null) {
@@ -47,11 +62,10 @@ public class FacebookIntegration implements SocialIntegration{
         request.executeAsync();
     }
 
-    public static CallbackManager init(IntegrationActivity newActivity) {
-        activity = newActivity;
-        CallbackManager facebookCallbackManager;
+    public CallbackManager init(IntegrationActivity newActivity) {
+        weakActivity = new WeakReference<Activity>(newActivity);
 
-        facebookCallbackManager = CallbackManager.Factory.create();
+        CallbackManager facebookCallbackManager = CallbackManager.Factory.create();
 
         LoginManager.getInstance().registerCallback(facebookCallbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -75,11 +89,15 @@ public class FacebookIntegration implements SocialIntegration{
                     }
 
                     void sendBroadcast() {
-                        activity.sendBroadcast(
-                                new Intent(
-                                        IntegrationActivity.NEW_NETWORK_IS_LOGGED)
-                                        .putExtra(IntegrationActivity.NETWORK_NAME, "Фейсбук")
-                        );
+                        Activity activity = weakActivity.get();
+
+                        if (activity != null) {
+                            activity.sendBroadcast(
+                                    new Intent(
+                                            IntegrationActivity.NEW_NETWORK_IS_LOGGED)
+                                            .putExtra(IntegrationActivity.NETWORK_NAME, "Фейсбук")
+                            );
+                        }
                     }
                 }
         );
@@ -90,8 +108,9 @@ public class FacebookIntegration implements SocialIntegration{
 
     @Override
     public void login() {
-        if ((activity == null) || (activity.isFinishing())) {
-            Log.d(LOG_TAG, "Кто-то набажил : (activity == null) || (activity.isFinishing()) ");
+        Activity activity = weakActivity.get();
+        if (activity == null) {
+            Log.d(LOG_TAG, "Кто-то набажил : (activity == null) ");
             return;
         }
         Log.d(LOG_TAG, "in_login");
@@ -101,12 +120,17 @@ public class FacebookIntegration implements SocialIntegration{
     @Override
     public void logout() {
         AccessToken.setCurrentAccessToken(null);
-        Log.d(LOG_TAG, "unlogin");
+        Log.d(LOG_TAG, "logout");
     }
 
     @Override
     public Drawable getIcon() {
-        return null;
+        Activity activity = weakActivity.get();
+        if(activity == null) {
+            return null;
+        } else {
+            return activity.getResources().getDrawable(R.mipmap.ic_facebook);
+        }
     }
 
     @Override
