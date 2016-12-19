@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Multi Checkin</string>
+    <string name="app_name" translatable="false">Multi Checkin</string>
 
-    <string name="facebook_app_id">752889364866992</string>
+    <string name="facebook_app_id" translatable="false">752889364866992</string>
 
 
-    <string name="provider_authorities">com.facebook.app.FacebookContentProvider752889364866992</string>
+    <string name="provider_authorities" translatable="false">com.facebook.app.FacebookContentProvider752889364866992</string>
 
     <string name="action_settings">Settings</string>
     <string name="step2_hint">2. Enter comment or leave blank for default</string>
@@ -15,5 +15,9 @@
     <string name="step2_undo">undo</string>
     <string name="step1_nocamera">Sorry, your device does not have a working camera</string>
     <string name="step1_nofile">Unable to select image</string>
-    <string name="services_settings">Services settings</string>
+    <string name="services_settings">Social networks</string>
+    <string name="vk_name">VK</string>
+    <string name="fb_name">Facebook</string>
+    <string name="social_network_icon">Social network icon</string>
+    <string name="social_settings_hint">Here you can choose where to post your photos to</string>
 </resources>

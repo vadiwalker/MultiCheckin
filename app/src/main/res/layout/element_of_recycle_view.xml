@@ -11,16 +11,16 @@
         android:layout_height="60dp"
         app:srcCompat="@android:drawable/ic_delete"
         android:id="@+id/icon_of_network"
+        android:contentDescription="@string/social_network_icon"
         />
 
     <TextView
-        android:text="TextView"
         android:layout_weight="1"
-
+        android:layout_gravity="fill_horizontal|fill"
         android:textSize="30sp"
-        android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:id="@+id/name_of_network" />
+        android:id="@+id/name_of_network"
+        android:layout_width="200sp" />
 
     <CheckBox
 

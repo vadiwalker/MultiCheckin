@@ -37,7 +37,9 @@ import ru.ifmo.droid2016.korchagin.multicheckin.R;
 
 public class VKIntegration implements SocialIntegration{
 
-    private VKIntegration() {}
+    private VKIntegration() {
+        weakActivity = new WeakReference<>(null);
+    }
 
     private static VKIntegration mInstance;
 
@@ -104,16 +106,24 @@ public class VKIntegration implements SocialIntegration{
     @Override
     public Drawable getIcon() {
         Activity activity = weakActivity.get();
-        if(activity == null)
+        if(activity == null) {
             return null;
-        return activity.getResources().getDrawable(R.mipmap.ic_vk);
+        } else {
+            return activity.getResources().getDrawable(R.mipmap.ic_vk);
+        }
         // Deprecated since API 22, but substitute appeared at API 21 and we target API 16+
     }
 
     @Override
     @NonNull
     public String getName() {
-        return "VK";
+        Activity activity = weakActivity.get();
+        if(activity == null){
+            Log.d(TAG, "No activity while getting name");
+            return "VK";
+        } else {
+            return activity.getString(R.string.vk_name);
+        }
     }
 
     @Override

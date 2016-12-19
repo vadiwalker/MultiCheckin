@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Multi Checkin</string>
+    <string name="action_settings">Настройки</string>
+    <string name="hint1_camera">Камера</string>
+    <string name="hint1_file">Файл</string>
+    <string name="step1_hint">1. Выберите фотографию для отправки</string>
+    <string name="step1_nocamera">Камера не найдена</string>
+    <string name="step1_nofile">Не получилось выбрать изображение</string>
+    <string name="step1_or">или</string>
+    <string name="step2_hint">2. Введите комментарий или оставьте поле пустым для комментария по умолчанию</string>
+    <string name="step2_undo">Отмена</string>
+    <string name="vk_name">Вконтакте</string>
+    <string name="fb_name">Facebook</string>
+    <string name="social_network_icon">Иконка социальной сети</string>
+    <string name="services_settings">Социальные сети</string>
+    <string name="social_settings_hint">Выберите, куда отправлять ваши фотографии</string>
+</resources>
