@@ -7,7 +7,8 @@ import android.support.annotation.IntDef;
  */
 
 @IntDef(value = {
-        SocialIdentifier.VK_LOGIN
+        SocialIdentifier.VK_LOGIN,
+        SocialIdentifier.TWITTER_AUTH
 })
 /**
  * Если нужно указать где-нибудь какой-нибудь ID, резервируем его здесь, блоками по 100.
@@ -16,4 +17,5 @@ import android.support.annotation.IntDef;
  */
 public @interface SocialIdentifier {
     int VK_LOGIN = 1001; // если что, возьму под VK блок 1000-1099
+    int TWITTER_AUTH = 1101; // Twitter 1100-1199
 }
