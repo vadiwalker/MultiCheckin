@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.facebook.CallbackManager;
 
@@ -73,7 +74,7 @@ public class IntegrationActivity extends AppCompatActivity {
 
         Vector<SocialIntegration> networks = new Vector<>();
 
-        networks.addElement(FacebookIntegration.getmInstance());
+        networks.addElement(FacebookIntegration.getInstance());
         networks.addElement(VKIntegration.getInstance());
 
         // TODO  добавить сюда все Integration-ы
@@ -94,7 +95,7 @@ public class IntegrationActivity extends AppCompatActivity {
 
         VKIntegration.getInstance().updateActivityReference(this);
 
-        facebookCallbackManager = FacebookIntegration.getmInstance().init(this);
+        facebookCallbackManager = FacebookIntegration.getInstance().init(this);
     }
 
     @Override
@@ -112,4 +113,11 @@ public class IntegrationActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceivers();
     }
+
+    public void onClickFacebookDebug(View view) {
+        Intent intent = new Intent().setClassName(this, "ru.ifmo.droid2016.korchagin.multicheckin.FacebookDebugActivity");
+
+        startActivity(intent);
+    }
+
 }

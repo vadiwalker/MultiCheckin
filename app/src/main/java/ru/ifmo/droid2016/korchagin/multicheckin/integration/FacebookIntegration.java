@@ -30,12 +30,12 @@ public class FacebookIntegration implements SocialIntegration{
     private WeakReference<Activity> weakActivity;
 
     private FacebookIntegration() {
-        weakActivity = new WeakReference<Activity>(null);
+        weakActivity = new WeakReference<>(null);
     }
 
     private static FacebookIntegration mInstance;
 
-    public static FacebookIntegration getmInstance() {
+    public static FacebookIntegration getInstance() {
         if (mInstance != null) {
             return mInstance;
         } else {
@@ -46,7 +46,7 @@ public class FacebookIntegration implements SocialIntegration{
 
     public void testRequest() {
         if (AccessToken.getCurrentAccessToken() == null) {
-            Log.d(LOG_TAG, "int testRequest no AccessToken");
+            Log.d(LOG_TAG, "in testRequest no AccessToken");
             return;
         }
 
@@ -60,11 +60,44 @@ public class FacebookIntegration implements SocialIntegration{
                 }
         );
 
+
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,link");
         request.setParameters(parameters);
         request.executeAsync();
     }
+
+    public void testRequest_2(String string) {
+        if (AccessToken.getCurrentAccessToken() == null) {
+            Log.d(LOG_TAG, "in testRequest_2 no AccessToken");
+            return;
+        }
+
+        JSONObject jsonObject = null;
+
+        try {
+            jsonObject = new JSONObject("{\"id\" : \"" + string + "\"}");
+        } catch (Exception ex) {
+            Log.d(LOG_TAG, ex.toString());
+            return;
+        }
+
+        GraphRequest request = GraphRequest.newPostRequest(
+                AccessToken.getCurrentAccessToken(),
+                "me/feed",
+                jsonObject,
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse graphResponse) {
+                        Log.d(LOG_TAG, "Ответ : " + graphResponse.toString());
+                    }
+                }
+        );
+
+        request.executeAsync();
+    }
+
+
 
     public CallbackManager init(IntegrationActivity newActivity) {
         weakActivity = new WeakReference<Activity>(newActivity);

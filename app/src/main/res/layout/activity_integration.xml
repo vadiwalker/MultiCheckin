@@ -41,6 +41,7 @@
         android:layout_height="wrap_content"
         tools:layout_editor_absoluteY="343dp"
         tools:layout_editor_absoluteX="48dp"
-        android:id="@+id/button2" />
+        android:id="@+id/button2"
+        android:onClick="onClickFacebookDebug" />
 
 </android.support.constraint.ConstraintLayout>
