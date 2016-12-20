@@ -40,15 +40,20 @@ public class SendToAllJob extends Job {
             executionWindowStart = 30 * 1000;
             executionWindowEnd = 5 * 60 * 1000;
         }
-        new JobRequest.Builder(VKIntegration.VKSendJob.TAG) // build VK-Job
-                .setExtras(extras)
-                .setExecutionWindow(executionWindowStart, executionWindowEnd)
-                .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
-                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                .setRequirementsEnforced(true)
-                .setPersisted(true)
-                .setUpdateCurrent(false)
-                .build().schedule();
+        if(VKIntegration.getInstance().getStatus()){
+            /*
+            Create "Send to VK" job
+             */
+            new JobRequest.Builder(VKIntegration.VKSendJob.TAG) // build VK-Job
+                    .setExtras(extras)
+                    .setExecutionWindow(executionWindowStart, executionWindowEnd)
+                    .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
+                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                    .setRequirementsEnforced(true)
+                    .setPersisted(true)
+                    .setUpdateCurrent(false)
+                    .build().schedule();
+        }
         return Result.SUCCESS;
     }
 }
