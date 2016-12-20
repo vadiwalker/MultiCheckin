@@ -105,6 +105,7 @@ public class IntegrationActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         VKIntegration.getInstance().tryLoginFinish(requestCode, resultCode, data);
+        TwitterIntegration.getInstance().tryLoginFinish(requestCode, resultCode, data);
         if (facebookCallbackManager.onActivityResult(requestCode, resultCode, data)) {
             Log.d(LOG_TAG, "OK");
             return;

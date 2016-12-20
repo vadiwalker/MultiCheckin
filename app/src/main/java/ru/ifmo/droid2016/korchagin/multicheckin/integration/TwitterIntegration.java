@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
@@ -107,11 +108,11 @@ public class TwitterIntegration implements SocialIntegration {
     @Override
     public Drawable getIcon() {
         Activity activity = weakActivity.get();
-        if(activity == null){
+        if(activity == null) {
             return null;
+        } else {
+            return activity.getResources().getDrawable(R.mipmap.ic_twitter);
         }
-
-        return activity.getResources().getDrawable(R.mipmap.ic_twitter);
     }
 
     @NonNull
@@ -143,6 +144,18 @@ public class TwitterIntegration implements SocialIntegration {
         if(prefs.contains(TOKEN) && prefs.contains(SECRET)){
             AccessToken token = new AccessToken(prefs.getString(TOKEN, ""), prefs.getString(SECRET, ""));
             TwitterFactory.getSingleton().setOAuthAccessToken(token);
+        }
+    }
+
+    public void tryLoginFinish(int requestCode, int resultCode, Intent data){
+        if(getStatus()){
+            Log.d(TAG, "Twitter login successful");
+            Activity activity = weakActivity.get();
+            if(activity != null) {
+                Intent successIntent = new Intent(IntegrationActivity.NEW_NETWORK_IS_LOGGED);
+                successIntent.putExtra(IntegrationActivity.NETWORK_NAME, getNetworkName());
+                activity.sendBroadcast(successIntent);
+            }
         }
     }
 }
