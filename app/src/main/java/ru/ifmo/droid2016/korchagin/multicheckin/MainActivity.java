@@ -29,15 +29,7 @@ import java.io.IOException;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.FacebookIntegration;
 
 public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener  {
-
-    static final String LOG_TAG_DEBUG_FACEBOOK = "facebook_integration";
-
-    private Button debug_facebook_button;
-
-//    public void onClickDebugFacebookButton(View view) {
-//        FacebookIntegration.testRequest();
-//    }
-
+    
     enum Step{
         STEP_1,
         STEP_2
@@ -81,7 +73,6 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
                 }
                 break;
         }
-
     }
 
     @Override
@@ -132,13 +123,6 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         prefs.registerOnSharedPreferenceChangeListener(this);
-
-
-
-        //facebookCallbackManager =  FacebookIntegration.init(this);
-        debug_facebook_button = (Button)findViewById(R.id.debug_facebook_button);
-
-
     }
 
     @Override

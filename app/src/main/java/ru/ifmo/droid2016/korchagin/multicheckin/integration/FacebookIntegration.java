@@ -29,6 +29,10 @@ public class FacebookIntegration implements SocialIntegration{
 
     private WeakReference<Activity> weakActivity;
 
+    private FacebookIntegration() {
+        weakActivity = new WeakReference<Activity>(null);
+    }
+
     private static FacebookIntegration mInstance;
 
     public static FacebookIntegration getmInstance() {
