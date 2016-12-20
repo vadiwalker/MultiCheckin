@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -29,6 +31,7 @@ import com.vk.sdk.api.photo.VKUploadImage;
 import java.lang.ref.WeakReference;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
+import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 
 
 /**
@@ -36,6 +39,25 @@ import ru.ifmo.droid2016.korchagin.multicheckin.R;
  */
 
 public class VKIntegration implements SocialIntegration{
+
+    public static class VKSendJob extends Job {
+        public static final String TAG = "SendPhotoToVKJob";
+
+        @NonNull
+        @Override
+        protected Result onRunJob(Params params) {
+            PersistableBundleCompat extras = params.getExtras();
+            String photoPath = extras.getString(SendToAllJob.PHOTO_TAG, null);
+            Bitmap photo = BitmapFileUtil.getFromPath(photoPath);
+            String message = extras.getString(SendToAllJob.MSG_TAG, null);
+            boolean res = VKIntegration.getInstance().sendPhotos(photo, message);
+            if(res){
+                return Result.SUCCESS;
+            } else {
+                return Result.RESCHEDULE;
+            }
+        }
+    }
 
     private VKIntegration() {
         weakActivity = new WeakReference<>(null);
@@ -56,7 +78,7 @@ public class VKIntegration implements SocialIntegration{
         weakActivity = new WeakReference<>(activity);
     }
 
-    private final String TAG = "VK_Int";
+    private static final String TAG = "VK_Integration";
 
     private WeakReference<Activity> weakActivity;
 

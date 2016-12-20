@@ -20,4 +20,5 @@
     <string name="fb_name">Facebook</string>
     <string name="social_network_icon">Social network icon</string>
     <string name="social_settings_hint">Here you can choose where to post your photos to</string>
+    <string name="step2_default_pref">Default message</string>
 </resources>

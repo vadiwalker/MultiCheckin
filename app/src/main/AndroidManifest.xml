@@ -3,6 +3,8 @@
     package="ru.ifmo.droid2016.korchagin.multicheckin">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
     <uses-feature android:name="android.hardware.camera" />
 
@@ -40,7 +42,8 @@
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
 
-        <activity android:name=".integration.IntegrationActivity"></activity>
+        <activity android:name=".integration.IntegrationActivity" />
+
     </application>
 
 </manifest>

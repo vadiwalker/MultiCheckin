@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -20,6 +21,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.vk.sdk.util.VKUtil;
@@ -27,8 +30,10 @@ import com.vk.sdk.util.VKUtil;
 import java.io.IOException;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.FacebookIntegration;
+import ru.ifmo.droid2016.korchagin.multicheckin.integration.SendToAllJob;
+import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 
-public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener  {
+public class MainActivity extends AppCompatActivity  {
 
     static final String LOG_TAG_DEBUG_FACEBOOK = "facebook_integration";
 
@@ -49,6 +54,9 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
 
     private ImageView imageView;
     private EditText commentText;
+    private Bitmap image;
+
+    private static final String IMAGE_STORE_TAG = "ActualImage";
 
     private static final int REQUEST_PICTURE_CAPTURE = 1;
     private static final int REQUEST_PICTURE_FROM_FILE = 2;
@@ -102,8 +110,17 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(IMAGE_STORE_TAG, image);
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(savedInstanceState != null){
+            image = (Bitmap)savedInstanceState.getParcelable(IMAGE_STORE_TAG);
+        }
         setContentView(R.layout.activity_main);
 
         commentText = (EditText) findViewById(R.id.commentText);
@@ -118,7 +135,9 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         step2 = new View[3];
         step2[0] = imageView;
         step2[1] = findViewById(R.id.step2_undo);
-        step2[2] = findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new SendBtnListener());
+        step2[2] = fab;
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -129,16 +148,39 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         t.show();
 
 
-        SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefs.registerOnSharedPreferenceChangeListener(this);
-
-
 
         //facebookCallbackManager =  FacebookIntegration.init(this);
         debug_facebook_button = (Button)findViewById(R.id.debug_facebook_button);
 
 
+    }
+
+    class SendBtnListener implements View.OnClickListener{
+
+        @Override
+        public void onClick(View v) {
+            PersistableBundleCompat extras = new PersistableBundleCompat();
+            String pathToImage = BitmapFileUtil.writeToCacheAndGivePath(image);
+            if(pathToImage == null){
+                Log.e("Sender", "Unable to save image to cache");
+            } else {
+                extras.putString(SendToAllJob.PHOTO_TAG, pathToImage);
+                image = null;
+            }
+            String comment;
+            if(commentText.getText() == null || commentText.getText().length() == 0){
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                comment = prefs.getString("step2_default_pref", null);
+            } else {
+                comment = commentText.getText().toString();
+            }
+            extras.putString(SendToAllJob.MSG_TAG, comment);
+            new JobRequest.Builder(SendToAllJob.TAG)
+                    .setExecutionWindow(1L, 1000L)
+                    .setExtras(extras)
+                    .build().schedule();
+            undoStep2(null);
+        }
     }
 
     @Override
@@ -176,6 +218,7 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
     }
 
     public void gotoStep2(@NonNull Bitmap image){
+        this.image = image;
         imageView.setImageBitmap(image);
         for (View view: step1) {
             view.setVisibility(View.INVISIBLE);
@@ -213,20 +256,6 @@ public class MainActivity extends AppCompatActivity  implements SharedPreference
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        switch (key){
-            case "pref_vk":
-                Log.e("TTX", "VKFLIP");
-                // TODO : сделать логин VK и вообще
-                break;
-            case "pref_fb":
-                Log.e("TTX", "FBFLIP");
-                // TODO : что-то делать тебе, Влад
-                break;
-        }
     }
 
 }
