@@ -36,14 +36,6 @@ import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 
 public class MainActivity extends AppCompatActivity  {
 
-    static final String LOG_TAG_DEBUG_FACEBOOK = "facebook_integration";
-
-    private Button debug_facebook_button;
-
-//    public void onClickDebugFacebookButton(View view) {
-//        FacebookIntegration.testRequest();
-//    }
-
     enum Step{
         STEP_1,
         STEP_2
@@ -150,7 +142,6 @@ public class MainActivity extends AppCompatActivity  {
 
 
         //facebookCallbackManager =  FacebookIntegration.init(this);
-        debug_facebook_button = (Button)findViewById(R.id.debug_facebook_button);
 
 
     }
