@@ -33,7 +33,6 @@ import ru.ifmo.droid2016.korchagin.multicheckin.integration.FacebookIntegration;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.SendToAllJob;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 
-public class MainActivity extends AppCompatActivity  implements SharedPreferences.OnSharedPreferenceChangeListener  {
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -149,10 +148,6 @@ public class MainActivity extends AppCompatActivity  {
         Toast t = Toast.makeText(getBaseContext(), fingerprints[0], Toast.LENGTH_LONG);
         t.show();
 
-
-        SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        prefs.registerOnSharedPreferenceChangeListener(this);
 
         //facebookCallbackManager =  FacebookIntegration.init(this);
         debug_facebook_button = (Button)findViewById(R.id.debug_facebook_button);

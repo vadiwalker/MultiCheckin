@@ -32,5 +32,14 @@
         app:srcCompat="@android:drawable/ic_dialog_email"
         app:elevation="10dp"
         android:visibility="invisible" />
+    <Button
+     android:text="Button"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:id="@+id/debug_facebook_button"
+
+     android:onClick="onClickDebugFacebookButton"
+     app:layout_anchorGravity="bottom|center_horizontal"
+     android:layout_gravity="center_vertical|center_horizontal" />
 
 </android.support.design.widget.CoordinatorLayout>
