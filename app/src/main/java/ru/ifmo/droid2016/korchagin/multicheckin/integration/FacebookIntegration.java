@@ -84,7 +84,7 @@ public class FacebookIntegration implements SocialIntegration{
 
         GraphRequest request = GraphRequest.newPostRequest(
                 AccessToken.getCurrentAccessToken(),
-                "me/feed",
+                "/me/feed",
                 jsonObject,
                 new GraphRequest.Callback() {
                     @Override
@@ -93,6 +93,10 @@ public class FacebookIntegration implements SocialIntegration{
                     }
                 }
         );
+
+
+
+        Log.d(LOG_TAG, " Запрос: " + request.toString());
 
         request.executeAsync();
     }
@@ -132,7 +136,7 @@ public class FacebookIntegration implements SocialIntegration{
                             activity.sendBroadcast(
                                     new Intent(
                                             IntegrationActivity.NEW_NETWORK_IS_LOGGED)
-                                            .putExtra(IntegrationActivity.NETWORK_NAME, "Фейсбук")
+                                            .putExtra(IntegrationActivity.NETWORK_NAME, getNetworkName())
                             );
                         }
                     }
@@ -172,7 +176,7 @@ public class FacebookIntegration implements SocialIntegration{
 
     @Override
     @NonNull
-    public String getName() {
+    public String getNetworkNameLocalized() {
         return "Фейсбук";
     }
 
@@ -181,5 +185,11 @@ public class FacebookIntegration implements SocialIntegration{
         Log.d(LOG_TAG, String.valueOf((AccessToken.getCurrentAccessToken() != null)));
         return (AccessToken.getCurrentAccessToken() != null);
     }
+
+    @Override
+    @NonNull public String getNetworkName() {
+        return "Фейсбук";
+    }
+
 
 }

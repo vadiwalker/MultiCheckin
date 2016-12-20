@@ -1,6 +1,5 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.utils;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -47,7 +46,7 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
 
         int pos = 0;
         for(SocialIntegration w : socialNetworks) {
-            posInAdapter.put(w.getName(), pos);
+            posInAdapter.put(w.getNetworkName(), pos);
             pos++;
         }
 
@@ -73,7 +72,7 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
             holder.iconOfNetwork.setImageDrawable(mIcon);
         }
 
-        holder.nameOfNetwork.setText(socialNetworks.elementAt(position).getName());
+        holder.nameOfNetwork.setText(socialNetworks.elementAt(position).getNetworkNameLocalized());
 
         holder.statusOfNetwork.setChecked(socialNetworks.elementAt(position).getStatus());
 

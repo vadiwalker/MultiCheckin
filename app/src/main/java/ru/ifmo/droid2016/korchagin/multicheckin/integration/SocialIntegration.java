@@ -29,7 +29,9 @@ public interface SocialIntegration {
      *   This method should return String name of social network.
      * @return Name of social network
      */
-    @NonNull String getName();
+    @NonNull String getNetworkNameLocalized();
+
+    @NonNull String getNetworkName();
 
     /**
      *  This method should return true if there is exists saved asses token, and false otherwise.

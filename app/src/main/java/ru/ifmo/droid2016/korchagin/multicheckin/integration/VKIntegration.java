@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
@@ -91,7 +90,7 @@ public class VKIntegration implements SocialIntegration{
             if(VKSdk.isLoggedIn()){
                 Log.d(TAG, "Already logged in");
                 Intent successIntent = new Intent(IntegrationActivity.NEW_NETWORK_IS_LOGGED);
-                successIntent.putExtra(IntegrationActivity.NETWORK_NAME, getName());
+                successIntent.putExtra(IntegrationActivity.NETWORK_NAME, getNetworkName());
                 activity.sendBroadcast(successIntent);
             }
             Log.d(TAG, "Starting login");
@@ -110,7 +109,7 @@ public class VKIntegration implements SocialIntegration{
                 Activity activity = weakActivity.get();
                 if(activity != null) {
                     Intent successIntent = new Intent(IntegrationActivity.NEW_NETWORK_IS_LOGGED);
-                    successIntent.putExtra(IntegrationActivity.NETWORK_NAME, getName());
+                    successIntent.putExtra(IntegrationActivity.NETWORK_NAME, getNetworkName());
                     activity.sendBroadcast(successIntent);
                 }
 
@@ -140,7 +139,7 @@ public class VKIntegration implements SocialIntegration{
 
     @Override
     @NonNull
-    public String getName() {
+    public String getNetworkNameLocalized() {
         Activity activity = weakActivity.get();
         if(activity == null){
             Log.d(TAG, "No activity while getting name");
@@ -208,4 +207,10 @@ public class VKIntegration implements SocialIntegration{
             }
         });
     }
+
+    @Override
+    @NonNull public String getNetworkName() {
+        return "VK";
+    }
+
 }
