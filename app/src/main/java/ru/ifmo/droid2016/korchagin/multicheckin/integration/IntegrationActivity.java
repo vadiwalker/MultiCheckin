@@ -20,6 +20,7 @@ import java.util.Vector;
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.MRecyclerAdapter;
+import twitter4j.TwitterException;
 
 public class IntegrationActivity extends AppCompatActivity {
     static final String LOG_TAG = "facebook_integration";
@@ -72,6 +73,15 @@ public class IntegrationActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new MRecyclerAdapter(IntegrationsUtil.getAllIntegrations(), posInAdapter);
+        Vector<SocialIntegration> networks = new Vector<>();
+
+        networks.addElement(FacebookIntegration.getInstance());
+        networks.addElement(VKIntegration.getInstance());
+        networks.addElement(TwitterIntegration.getInstance());
+
+        // TODO  добавить сюда все Integration-ы
+
+        mAdapter = new MRecyclerAdapter(networks, posInAdapter);
         mRecyclerView.setAdapter(mAdapter);
 
         // TODO КАЖДОМУ послать broadcast после успешного логирования!
@@ -86,6 +96,7 @@ public class IntegrationActivity extends AppCompatActivity {
         initReceivers();
 
         VKIntegration.getInstance().updateActivityReference(this);
+        TwitterIntegration.getInstance().updateActivityReference(this);
 
         facebookCallbackManager = FacebookIntegration.getInstance().init(this);
     }

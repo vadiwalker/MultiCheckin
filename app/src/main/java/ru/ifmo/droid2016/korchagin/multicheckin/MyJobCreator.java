@@ -20,6 +20,8 @@ public class MyJobCreator implements JobCreator{
                 return new SendToAllJob();
             case VKIntegration.VKSendJob.TAG:
                 return new VKIntegration.VKSendJob();
+            case TwitterIntegration.TwitterSendJob.TAG:
+                return new TwitterIntegration.TwitterSendJob();
             default:
                 Log.e(TAG, "Job with nonexistent tag " + tag + " was created");
                 return null;

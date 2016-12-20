@@ -38,6 +38,9 @@ public class BitmapFileUtil {
             return null;
         }
     }
+    public static File getFileFromPath(String path){
+        return new File(path);
+    }
 
     public static Bitmap getFromPath(String path){
         return BitmapFactory.decodeFile(path);

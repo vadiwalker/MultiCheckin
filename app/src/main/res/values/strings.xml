@@ -21,4 +21,5 @@
     <string name="social_network_icon">Social network icon</string>
     <string name="social_settings_hint">Here you can choose where to post your photos to</string>
     <string name="step2_default_pref">Default message</string>
+    <string name="oauth_twitter_pin_hint">Please enter here PIN you got from Twitter</string>
 </resources>

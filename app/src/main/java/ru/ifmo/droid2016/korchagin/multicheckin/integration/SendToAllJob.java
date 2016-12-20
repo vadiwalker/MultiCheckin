@@ -53,6 +53,15 @@ public class SendToAllJob extends Job {
                     .setPersisted(true)
                     .setUpdateCurrent(false)
                     .build().schedule();
+            new JobRequest.Builder(TwitterIntegration.TwitterSendJob.TAG) // build VK-Job
+                    .setExtras(extras)
+                    .setExecutionWindow(executionWindowStart, executionWindowEnd)
+                    .setBackoffCriteria(15_000L, JobRequest.BackoffPolicy.LINEAR)
+                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                    .setRequirementsEnforced(true)
+                    .setPersisted(true)
+                    .setUpdateCurrent(false)
+                    .build().schedule();
         }
         return Result.SUCCESS;
     }
