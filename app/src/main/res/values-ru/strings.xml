@@ -10,7 +10,6 @@
     <string name="step1_or">или</string>
     <string name="step2_hint">2. Введите комментарий или оставьте поле пустым для комментария по умолчанию</string>
     <string name="step2_undo">Отмена</string>
-    <string name="vk_name">Вконтакте</string>
     <string name="fb_name">Facebook</string>
     <string name="social_network_icon">Иконка социальной сети</string>
     <string name="services_settings">Социальные сети</string>
