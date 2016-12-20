@@ -44,6 +44,8 @@
 
         <activity android:name=".integration.IntegrationActivity" />
 
+        <activity android:name=".FacebookDebugActivity"></activity>
+
     </application>
 
 </manifest>
