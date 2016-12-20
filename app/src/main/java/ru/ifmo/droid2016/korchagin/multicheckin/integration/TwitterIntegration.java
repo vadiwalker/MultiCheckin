@@ -16,6 +16,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 
 import java.lang.ref.WeakReference;
 
+import ru.ifmo.droid2016.korchagin.multicheckin.R;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 import twitter4j.StatusUpdate;
 import twitter4j.Twitter;
@@ -105,7 +106,12 @@ public class TwitterIntegration implements SocialIntegration {
     @Nullable
     @Override
     public Drawable getIcon() {
-        return null;
+        Activity activity = weakActivity.get();
+        if(activity == null){
+            return null;
+        }
+
+        return activity.getResources().getDrawable(R.mipmap.ic_twitter);
     }
 
     @NonNull
