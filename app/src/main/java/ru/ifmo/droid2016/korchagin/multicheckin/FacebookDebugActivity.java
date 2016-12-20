@@ -28,6 +28,6 @@ public class FacebookDebugActivity extends AppCompatActivity {
     }
 
     public void onClickPublishString(View view) {
-        FacebookIntegration.getInstance().testRequest_2(editText.toString());
+        FacebookIntegration.getInstance().testRequest_2(editText.getText().toString());
     }
 }

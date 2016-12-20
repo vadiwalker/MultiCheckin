@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
+import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.MRecyclerAdapter;
 
 public class IntegrationActivity extends AppCompatActivity {
@@ -37,8 +38,6 @@ public class IntegrationActivity extends AppCompatActivity {
     // после успешного логирования надо вызвать у mAdapter notifyItemChanged()
 
     private BroadcastReceiver networkLoggingReceiver;
-
-
 
     void initReceivers() {
         networkLoggingReceiver = new BroadcastReceiver() {
@@ -72,14 +71,7 @@ public class IntegrationActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        Vector<SocialIntegration> networks = new Vector<>();
-
-        networks.addElement(FacebookIntegration.getInstance());
-        networks.addElement(VKIntegration.getInstance());
-
-        // TODO  добавить сюда все Integration-ы
-
-        mAdapter = new MRecyclerAdapter(networks, posInAdapter);
+        mAdapter = new MRecyclerAdapter(IntegrationsUtil.getAllIntegrations(), posInAdapter);
         mRecyclerView.setAdapter(mAdapter);
 
         // TODO КАЖДОМУ послать broadcast после успешного логирования!
