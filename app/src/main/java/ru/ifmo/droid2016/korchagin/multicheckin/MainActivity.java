@@ -25,6 +25,7 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.squareup.picasso.Picasso;
 import com.vk.sdk.util.VKUtil;
 
 import java.io.IOException;
@@ -237,11 +238,16 @@ public class MainActivity extends AppCompatActivity  {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Intent intent;
         switch (id){
             case R.id.services_settings :
-                Intent intent = new Intent();
+                intent = new Intent();
                 intent.setClassName(this, "ru.ifmo.droid2016.korchagin.multicheckin.integration.IntegrationActivity");
+                startActivity(intent);
+                return true;
+            case R.id.action_settings :
+                intent = new Intent();
+                intent.setClassName(this, ServicesActivity.class.getCanonicalName());
                 startActivity(intent);
                 return true;
         }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -46,16 +47,17 @@ public class VKIntegration implements SocialIntegration{
         @NonNull
         @Override
         protected Result onRunJob(Params params) {
-            PersistableBundleCompat extras = params.getExtras();
+            return Result.RESCHEDULE;
+        }
+
+        @Override
+        protected void onReschedule(int newJobId) {
+            PersistableBundleCompat extras = getParams().getExtras();
             String photoPath = extras.getString(SendToAllJob.PHOTO_TAG, null);
             Bitmap photo = BitmapFileUtil.getFromPath(photoPath);
             String message = extras.getString(SendToAllJob.MSG_TAG, null);
-            boolean res = VKIntegration.getInstance().sendPhotos(photo, message);
-            if(res){
-                return Result.SUCCESS;
-            } else {
-                return Result.RESCHEDULE;
-            }
+            boolean res = VKIntegration.getInstance().sendPhotosForJob(photo, message, newJobId);
+            super.onReschedule(newJobId);
         }
     }
 
@@ -158,25 +160,34 @@ public class VKIntegration implements SocialIntegration{
         return vkAccessToken != null ? Integer.parseInt(vkAccessToken.userId) : 0;
     }
 
+    private int getPostId() {
+        // TODO поставить getmyvkid обратно, пока пост в закрытое сообщество
+        // return getMyVKId();
+        return -135798184;
+    }
+
     /**
      * Отправляет пару из фоточки и коммента на стенку через AsyncTask
      * @param photo Bitmap фотки
      * @param comment Комментарий
      */
-    public boolean sendPhotos(@NonNull Bitmap photo, @Nullable final String comment){
+
+
+    public boolean sendPhotosForJob(@NonNull Bitmap photo, @Nullable final String comment, final int newJobId){
         VKRequest request = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo,
             VKImageParameters.jpgImage(0.9f)), getMyVKId(), 0);
-        request.executeWithListener(new VKRequest.VKRequestListener() {
+        request.executeSyncWithListener(new VKRequest.VKRequestListener() {
             @Override
             public void onComplete(VKResponse response) {
                 VKApiPhoto photoModel = ((VKPhotoArray) response.parsedModel).get(0);
-                makePost(new VKAttachments(photoModel), comment, getMyVKId());
+                makePost(new VKAttachments(photoModel), comment, getPostId());
+                JobManager.instance().cancel(newJobId);
             }
             @Override
             public void onError(VKError error) {
             }
         });
-        return false;
+        return true;
     }
 
     void makePost(VKAttachments att, String msg, final int ownerId) {

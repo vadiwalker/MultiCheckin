@@ -47,7 +47,7 @@ public class SendToAllJob extends Job {
             new JobRequest.Builder(VKIntegration.VKSendJob.TAG) // build VK-Job
                     .setExtras(extras)
                     .setExecutionWindow(executionWindowStart, executionWindowEnd)
-                    .setBackoffCriteria(10_000L, JobRequest.BackoffPolicy.LINEAR)
+                    .setBackoffCriteria(15_000L, JobRequest.BackoffPolicy.LINEAR)
                     .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
                     .setRequirementsEnforced(true)
                     .setPersisted(true)

@@ -22,5 +22,6 @@ public class MainApplication extends Application {
         AppEventsLogger.activateApp(this);
         JobManager.create(this).addJobCreator(new MyJobCreator());
 
+//        JobManager.instance().cancelAll();
     }
 }
