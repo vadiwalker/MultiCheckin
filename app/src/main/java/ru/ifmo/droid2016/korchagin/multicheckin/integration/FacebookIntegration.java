@@ -18,6 +18,7 @@ import com.facebook.login.LoginResult;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
@@ -76,7 +77,7 @@ public class FacebookIntegration implements SocialIntegration{
         JSONObject jsonObject = null;
 
         try {
-            jsonObject = new JSONObject("{\"id\" : \"" + string + "\"}");
+            jsonObject = new JSONObject("{\"message\" : \"" + string + "\"}");
         } catch (Exception ex) {
             Log.d(LOG_TAG, ex.toString());
             return;
@@ -101,6 +102,33 @@ public class FacebookIntegration implements SocialIntegration{
         request.executeAsync();
     }
 
+//    public void testRequest_3(String string, File file) {
+//        if (AccessToken.getCurrentAccessToken() == null) {
+//            Log.d(LOG_TAG, "in testRequest_2 no AccessToken");
+//            return;
+//        }
+//
+//
+//        public static GraphRequest newUploadPhotoRequest(AccessToken accessToken, String graphPath, File file, String caption, Bundle params, Callback callback)
+//
+//        GraphRequest request = GraphRequest.newUploadPhotoRequest(
+//                AccessToken.getCurrentAccessToken(),
+//                "/me/feed",
+//                jsonObject,
+//                new GraphRequest.Callback() {
+//                    @Override
+//                    public void onCompleted(GraphResponse graphResponse) {
+//                        Log.d(LOG_TAG, "Ответ : " + graphResponse.toString());
+//                    }
+//                }
+//        );
+//
+//
+//
+//        Log.d(LOG_TAG, " Запрос: " + request.toString());
+//
+//        request.executeAsync();
+//    }
 
 
     public CallbackManager init(IntegrationActivity newActivity) {
