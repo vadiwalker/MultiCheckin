@@ -25,7 +25,5 @@ public class MainApplication extends Application {
 
         TwitterIntegration.getInstance();
         TwitterIntegration.getInstance().applicationInit(getApplicationContext());
-
-//        JobManager.instance().cancelAll();
     }
 }

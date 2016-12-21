@@ -10,14 +10,12 @@ import java.util.List;
 
 public class ServicesActivity extends PreferenceActivity {
     @Override
-    public void onBuildHeaders(List<Header> target)
-    {
+    public void onBuildHeaders(List<Header> target) {
         loadHeadersFromResource(R.xml.services_header, target);
     }
 
     @Override
-    protected boolean isValidFragment(String fragmentName)
-    {
+    protected boolean isValidFragment(String fragmentName) {
         return ServicesFragment.class.getName().equals(fragmentName);
     }
 }

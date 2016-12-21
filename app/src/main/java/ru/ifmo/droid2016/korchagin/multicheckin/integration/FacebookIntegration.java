@@ -66,7 +66,6 @@ public class FacebookIntegration implements SocialIntegration {
                 }
         );
 
-
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,link");
         request.setParameters(parameters);
@@ -174,10 +173,6 @@ public class FacebookIntegration implements SocialIntegration {
         }
     }
 
-
-
-
-
     public CallbackManager init(IntegrationActivity newActivity) {
         weakActivity = new WeakReference<Activity>(newActivity);
 
@@ -270,6 +265,5 @@ public class FacebookIntegration implements SocialIntegration {
     @NonNull public String getNetworkName() {
         return "@strings.";
     }
-
 
 }

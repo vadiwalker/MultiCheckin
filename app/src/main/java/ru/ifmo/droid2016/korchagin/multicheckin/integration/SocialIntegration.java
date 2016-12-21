@@ -13,9 +13,16 @@ import com.evernote.android.job.Job;
 
 public interface SocialIntegration {
 
-
+    /**
+     *
+     *  This method is to get JobTag to send it in MyJobCreator
+     *
+     */
     String getSandJobTag();
 
+    /**
+     *  This method is to get job to return it in MyJobCreator
+     */
     Job getJob();
 
     /**

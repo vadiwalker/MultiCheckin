@@ -16,24 +16,18 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
-import com.facebook.AccessToken;
-import com.facebook.CallbackManager;
-import com.squareup.picasso.Picasso;
 import com.vk.sdk.util.VKUtil;
 
 import java.io.IOException;
 
-import ru.ifmo.droid2016.korchagin.multicheckin.integration.FacebookIntegration;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.SendToAllJob;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
-
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -54,7 +48,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private static final int REQUEST_PICTURE_CAPTURE = 1;
     private static final int REQUEST_PICTURE_FROM_FILE = 2;
-
 
 
     @Override
@@ -83,9 +76,7 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 break;
         }
-
     }
-
 
     @Override
     public void onBackPressed() {
@@ -141,11 +132,6 @@ public class MainActivity extends AppCompatActivity  {
         Log.e("CERT", fingerprints[0]);
         Toast t = Toast.makeText(getBaseContext(), fingerprints[0], Toast.LENGTH_LONG);
         t.show();
-
-
-        //facebookCallbackManager =  FacebookIntegration.init(this);
-
-
     }
 
     class SendBtnListener implements View.OnClickListener{
@@ -252,7 +238,6 @@ public class MainActivity extends AppCompatActivity  {
                 startActivity(intent);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
