@@ -9,6 +9,10 @@ import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 
+import java.util.Vector;
+
+import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
+
 /**
  * Created by ME on 20.12.2016.
  */
@@ -40,20 +44,15 @@ public class SendToAllJob extends Job {
             executionWindowStart = 30 * 1000;
             executionWindowEnd = 5 * 60 * 1000;
         }
-        if(VKIntegration.getInstance().getStatus()){
-            /*
-            Create "Send to VK" job
-             */
-            new JobRequest.Builder(VKIntegration.VKSendJob.TAG) // build VK-Job
-                    .setExtras(extras)
-                    .setExecutionWindow(executionWindowStart, executionWindowEnd)
-                    .setBackoffCriteria(15_000L, JobRequest.BackoffPolicy.LINEAR)
-                    .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
-                    .setRequirementsEnforced(true)
-                    .setPersisted(true)
-                    .setUpdateCurrent(false)
-                    .build().schedule();
-            new JobRequest.Builder(TwitterIntegration.TwitterSendJob.TAG) // build VK-Job
+
+        Vector<SocialIntegration> vector = IntegrationsUtil.getSelectedIntegrations();
+
+        Log.d("NEW", String.valueOf(vector.size()));
+
+        for (SocialIntegration AbstractIntegration : vector) {
+            Log.d("NEW", AbstractIntegration.getSandJobTag());
+
+            new JobRequest.Builder(AbstractIntegration.getSandJobTag()) // build Abstract-Job
                     .setExtras(extras)
                     .setExecutionWindow(executionWindowStart, executionWindowEnd)
                     .setBackoffCriteria(15_000L, JobRequest.BackoffPolicy.LINEAR)
@@ -63,6 +62,7 @@ public class SendToAllJob extends Job {
                     .setUpdateCurrent(false)
                     .build().schedule();
         }
+
         return Result.SUCCESS;
     }
 }

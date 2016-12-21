@@ -5,8 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -24,8 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
+import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 
-public class FacebookIntegration implements SocialIntegration{
+public class FacebookIntegration implements SocialIntegration {
     private static final String LOG_TAG = "facebook_integration";
 
     private WeakReference<Activity> weakActivity;
@@ -102,33 +107,75 @@ public class FacebookIntegration implements SocialIntegration{
         request.executeAsync();
     }
 
-//    public void testRequest_3(String string, File file) {
-//        if (AccessToken.getCurrentAccessToken() == null) {
-//            Log.d(LOG_TAG, "in testRequest_2 no AccessToken");
-//            return;
-//        }
-//
-//
-//        public static GraphRequest newUploadPhotoRequest(AccessToken accessToken, String graphPath, File file, String caption, Bundle params, Callback callback)
-//
-//        GraphRequest request = GraphRequest.newUploadPhotoRequest(
-//                AccessToken.getCurrentAccessToken(),
-//                "/me/feed",
-//                jsonObject,
-//                new GraphRequest.Callback() {
-//                    @Override
-//                    public void onCompleted(GraphResponse graphResponse) {
-//                        Log.d(LOG_TAG, "Ответ : " + graphResponse.toString());
-//                    }
-//                }
-//        );
-//
-//
-//
-//        Log.d(LOG_TAG, " Запрос: " + request.toString());
-//
-//        request.executeAsync();
-//    }
+    public boolean sendPhotosForJob(@NonNull Bitmap photo, @Nullable final String comment, final int newJobId) {
+        if (AccessToken.getCurrentAccessToken() == null) {
+            Log.d(LOG_TAG, "in testRequest_3 no AccessToken");
+            return false;
+        }
+        File file = BitmapFileUtil.getFileFromPath(BitmapFileUtil.writeToCacheAndGivePath(photo));
+
+        GraphRequest request;
+
+        try {
+            request = GraphRequest.newUploadPhotoRequest(
+                    AccessToken.getCurrentAccessToken(),
+                    "/me/photos",
+                    file,
+                    comment,
+                    null,
+                    new GraphRequest.Callback() {
+                        @Override
+                        public void onCompleted(GraphResponse graphResponse) {
+                            Log.d(LOG_TAG, "Ответ : " + graphResponse.toString());
+                            JobManager.instance().cancel(newJobId);
+                        }
+                    }
+            );
+
+        } catch (Exception ex) {
+            Log.d(LOG_TAG, ex.toString());
+            return false;
+        }
+
+        Log.d(LOG_TAG, " Запрос: " + request.toString());
+
+        request.executeAsync();
+
+        return true;
+    }
+
+    @Override
+    public String getSandJobTag() {
+        return FacebookSendJob.TAG;
+    }
+
+    @Override
+    public Job getJob() {
+        return new FacebookSendJob();
+    }
+
+    private static class FacebookSendJob extends Job {
+        public static final String TAG = "SendPhotoToFacebookJob";
+
+        @NonNull
+        @Override
+        protected Result onRunJob(Params params) {
+            return Result.RESCHEDULE;
+        }
+
+        @Override
+        protected void onReschedule(int newJobId) {
+            PersistableBundleCompat extras = getParams().getExtras();
+            String photoPath = extras.getString(SendToAllJob.PHOTO_TAG, null);
+            Bitmap photo = BitmapFileUtil.getFromPath(photoPath);
+            String message = extras.getString(SendToAllJob.MSG_TAG, null);
+            boolean res = FacebookIntegration.getInstance().sendPhotosForJob(photo, message, newJobId);
+            super.onReschedule(newJobId);
+        }
+    }
+
+
+
 
 
     public CallbackManager init(IntegrationActivity newActivity) {
@@ -205,7 +252,12 @@ public class FacebookIntegration implements SocialIntegration{
     @Override
     @NonNull
     public String getNetworkNameLocalized() {
-        return "Фейсбук";
+        Activity activity = weakActivity.get();
+        if (activity != null) {
+            return activity.getString(R.string.fb_name);
+        } else {
+            return "Facebook";
+        }
     }
 
     @Override
@@ -216,7 +268,7 @@ public class FacebookIntegration implements SocialIntegration{
 
     @Override
     @NonNull public String getNetworkName() {
-        return "Фейсбук";
+        return "@strings.";
     }
 
 

@@ -20,5 +20,15 @@ public class IntegrationsUtil {
         return vector;
     }
 
+    public static Vector<SocialIntegration> getSelectedIntegrations() {
+        Vector<SocialIntegration> vector = getAllIntegrations();
+        Vector<SocialIntegration> result = new Vector<>();
 
+        for (SocialIntegration w : vector) {
+            if (w.getStatus()) {
+                result.addElement(w);
+            }
+        }
+        return result;
+    }
 }

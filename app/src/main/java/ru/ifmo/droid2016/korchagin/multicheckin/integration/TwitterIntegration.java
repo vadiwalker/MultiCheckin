@@ -31,6 +31,16 @@ import twitter4j.auth.AccessToken;
 
 public class TwitterIntegration implements SocialIntegration {
 
+    @Override
+    public String getSandJobTag() {
+        return TwitterIntegration.TAG;
+    }
+
+    @Override
+    public Job getJob() {
+        return new TwitterSendJob();
+    }
+
     public static class TwitterSendJob extends Job {
         public static final String TAG = "SendPhotoToTwitterJob";
         @NonNull

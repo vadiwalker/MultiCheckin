@@ -38,9 +38,19 @@ import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
  * Created by ME on 17.12.2016.
  */
 
-public class VKIntegration implements SocialIntegration{
+public class VKIntegration implements SocialIntegration {
 
-    public static class VKSendJob extends Job {
+    @Override
+    public String getSandJobTag() {
+        return VKSendJob.TAG;
+    }
+
+    @Override
+    public Job getJob() {
+        return new VKSendJob();
+    }
+
+    private static class VKSendJob extends Job {
         public static final String TAG = "SendPhotoToVKJob";
 
         @NonNull
