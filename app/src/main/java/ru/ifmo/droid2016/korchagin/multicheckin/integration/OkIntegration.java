@@ -14,6 +14,7 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
@@ -35,10 +36,12 @@ public class OkIntegration implements SocialIntegration {
     private static final String REDIRECT_URI = "okauth://ok1249212672";
 
     private static OkIntegration instance = null;
-
+    private boolean validTokens = false;
     WeakReference<IntegrationActivity> weakActivity = new WeakReference<>(null);;
 
-    private OkIntegration() {}
+    private OkIntegration() {
+        Odnoklassniki.getInstance().checkValidTokens(getValidationListener());
+    }
 
     public static OkIntegration getInstance() {
         if (instance == null) {
@@ -68,6 +71,18 @@ public class OkIntegration implements SocialIntegration {
 
     public void sendPhotosForJob(Bitmap photo, String message, int newJobId) {
         Log.d(TAG, "send photo");
+        try {
+            JSONObject attachment = new JSONObject();
+            JSONObject text = new JSONObject();
+            text.put("type", "text");
+            text.put("text", message);
+            attachment.put("media", text);
+            Log.d(TAG, "text: " + text);
+            Log.d(TAG, "attachemnt: " + attachment);
+            Odnoklassniki.getInstance().performPosting(weakActivity.get(), attachment.toString(), true, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -94,6 +109,7 @@ public class OkIntegration implements SocialIntegration {
     public void logout() {
         Log.d(TAG, "logout");
         Odnoklassniki.getInstance().clearTokens();
+        validTokens = false;
     }
 
     @Nullable
@@ -122,7 +138,7 @@ public class OkIntegration implements SocialIntegration {
     @Override
     public boolean getStatus() {
         Log.d(TAG, "getStatus");
-        return false;
+        return validTokens;
     }
 
     void sendBroadcast() {
@@ -137,17 +153,19 @@ public class OkIntegration implements SocialIntegration {
         }
     }
 
-    public void tryLoginFinish(int requestCode, int resultCode, Intent data) {
+    public void tryProcessRequest(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "tryLoginFinish");
         if (Odnoklassniki.getInstance().onAuthActivityResult(requestCode, resultCode, data, getAuthListener())) {
             Log.d(TAG, "Authentication callback");
         } else if (Odnoklassniki.getInstance().onActivityResultResult(requestCode, resultCode, data, new OkListener() {
             @Override
             public void onSuccess(JSONObject json) {
-
+                Log.d(TAG, "succes posting: " + json);
             }
             @Override
-            public void onError(String error) {}
+            public void onError(String error) {
+                Log.d(TAG, "posting failed");
+            }
         })) {
             Log.d(TAG, "Result result");
         }
@@ -163,11 +181,27 @@ public class OkIntegration implements SocialIntegration {
                 } catch(JSONException e) {
                     e.printStackTrace();
                 }
+                validTokens = true;
             }
 
             @Override
             public void onError(String error) {
                 Log.d(TAG, "error in getAuthListener");
+            }
+        };
+    }
+
+    private OkListener getValidationListener() {
+        return new OkListener() {
+            @Override
+            public void onSuccess(JSONObject json) {
+                Log.d(TAG, "Validation success");
+                validTokens = true;
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.d(TAG, "Validation failed");
             }
         };
     }

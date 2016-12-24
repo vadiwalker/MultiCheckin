@@ -7,6 +7,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.vk.sdk.VKSdk;
 
+import ru.ifmo.droid2016.korchagin.multicheckin.integration.OkIntegration;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.TwitterIntegration;
 import ru.ok.android.sdk.Odnoklassniki;
 
@@ -30,5 +31,6 @@ public class MainApplication extends Application {
         final String APP_ID = "1249212672";
         final String PUBLIC_KEY = "CBAKHGHLEBABABABA";
         Odnoklassniki.createInstance(getApplicationContext(), APP_ID, PUBLIC_KEY);
+        OkIntegration.getInstance();
     }
 }
