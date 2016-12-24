@@ -20,6 +20,7 @@ import java.util.Vector;
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.MRecyclerAdapter;
+import ru.ok.android.sdk.Odnoklassniki;
 import twitter4j.TwitterException;
 
 public class IntegrationActivity extends AppCompatActivity {
@@ -73,13 +74,7 @@ public class IntegrationActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         mAdapter = new MRecyclerAdapter(IntegrationsUtil.getAllIntegrations(), posInAdapter);
-        Vector<SocialIntegration> networks = new Vector<>();
-
-        networks.addElement(FacebookIntegration.getInstance());
-        networks.addElement(VKIntegration.getInstance());
-        networks.addElement(TwitterIntegration.getInstance());
-
-        // TODO  добавить сюда все Integration-ы
+        Vector<SocialIntegration> networks = IntegrationsUtil.getAllIntegrations();
 
         mAdapter = new MRecyclerAdapter(networks, posInAdapter);
         mRecyclerView.setAdapter(mAdapter);
@@ -97,6 +92,7 @@ public class IntegrationActivity extends AppCompatActivity {
 
         VKIntegration.getInstance().updateActivityReference(this);
         TwitterIntegration.getInstance().updateActivityReference(this);
+        OkIntegration.getInstance().updateActivityReference(this);
 
         facebookCallbackManager = FacebookIntegration.getInstance().init(this);
     }
@@ -106,6 +102,8 @@ public class IntegrationActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         VKIntegration.getInstance().tryLoginFinish(requestCode, resultCode, data);
         TwitterIntegration.getInstance().tryLoginFinish(requestCode, resultCode, data);
+        OkIntegration.getInstance().tryLoginFinish(requestCode, resultCode, data);
+
         if (facebookCallbackManager.onActivityResult(requestCode, resultCode, data)) {
             Log.d(LOG_TAG, "OK");
             return;
