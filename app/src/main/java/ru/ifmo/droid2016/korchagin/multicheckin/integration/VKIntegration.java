@@ -137,6 +137,7 @@ public class VKIntegration implements SocialIntegration {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public Drawable getIcon() {
         Activity activity = weakActivity.get();
         if(activity == null) {
@@ -170,9 +171,8 @@ public class VKIntegration implements SocialIntegration {
     }
 
     private int getPostId() {
-        // TODO поставить getmyvkid обратно, пока пост в закрытое сообщество
-        // return getMyVKId();
-        return -135798184;
+         return getMyVKId();
+//        return -135798184;
     }
 
     /**
@@ -182,7 +182,7 @@ public class VKIntegration implements SocialIntegration {
      */
 
 
-    public boolean sendPhotosForJob(@NonNull Bitmap photo, @Nullable final String comment, final int newJobId){
+    private boolean sendPhotosForJob(@NonNull Bitmap photo, @Nullable final String comment, final int newJobId){
         VKRequest request = VKApi.uploadWallPhotoRequest(new VKUploadImage(photo,
             VKImageParameters.jpgImage(0.9f)), getMyVKId(), 0);
         request.executeSyncWithListener(new VKRequest.VKRequestListener() {
@@ -199,7 +199,7 @@ public class VKIntegration implements SocialIntegration {
         return true;
     }
 
-    void makePost(VKAttachments att, String msg, final int ownerId) {
+    private void makePost(VKAttachments att, String msg, final int ownerId) {
         VKParameters parameters = new VKParameters();
         parameters.put(VKApiConst.OWNER_ID, String.valueOf(ownerId));
         parameters.put(VKApiConst.ATTACHMENTS, att);
