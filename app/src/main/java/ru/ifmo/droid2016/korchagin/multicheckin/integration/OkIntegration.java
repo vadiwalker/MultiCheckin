@@ -79,7 +79,12 @@ public class OkIntegration implements SocialIntegration {
             attachment.put("media", text);
             Log.d(TAG, "text: " + text);
             Log.d(TAG, "attachemnt: " + attachment);
-            Odnoklassniki.getInstance().performPosting(weakActivity.get(), attachment.toString(), true, null);
+
+            if (weakActivity.get() == null) {
+                Log.d(TAG, " null activity");
+            } else {
+                Odnoklassniki.getInstance().performPosting(weakActivity.get(), attachment.toString(), true, null);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
