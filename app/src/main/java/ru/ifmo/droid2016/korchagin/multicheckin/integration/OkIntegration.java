@@ -14,26 +14,38 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 import ru.ok.android.sdk.Odnoklassniki;
 import ru.ok.android.sdk.OkListener;
+import ru.ok.android.sdk.OkPostingActivity;
+import ru.ok.android.sdk.Shared;
 import ru.ok.android.sdk.util.OkAuthType;
+import ru.ok.android.sdk.util.OkEncryptUtil;
+import ru.ok.android.sdk.util.OkRequestUtil;
 import ru.ok.android.sdk.util.OkScope;
 
+/**
+ * Created by vadim on 24.12.16.
+ */
 
 public class OkIntegration implements SocialIntegration {
+
 
     private static final String APP_ID = "1249212672";
     private static final String PUBLIC_KEY = "CBAKHGHLEBABABABA";
     private static final String SECRET_KEY = "EFC90F68D96FB26BDD678927";
     private static final String REDIRECT_URI = "okauth://ok1249212672";
+    private String access_token = null;
 
     private static OkIntegration instance = null;
     private boolean validTokens = false;
-    private WeakReference<IntegrationActivity> weakActivity = new WeakReference<>(null);;
+    WeakReference<IntegrationActivity> weakIntegrationActivity = new WeakReference<>(null);
+    WeakReference<Activity> weakMainActivity = new WeakReference<>(null);
 
     private OkIntegration() {
         Odnoklassniki.getInstance().checkValidTokens(getValidationListener());
@@ -67,23 +79,46 @@ public class OkIntegration implements SocialIntegration {
 
     public void sendPhotosForJob(Bitmap photo, String message, int newJobId) {
         Log.d(TAG, "send photo");
-        try {
-            JSONObject attachment = new JSONObject();
-            JSONObject text = new JSONObject();
-            text.put("type", "text");
-            text.put("text", message);
-            attachment.put("media", text);
-            Log.d(TAG, "text: " + text);
-            Log.d(TAG, "attachemnt: " + attachment);
 
-            if (weakActivity.get() == null) {
-                Log.d(TAG, " null activity");
-            } else {
-                Odnoklassniki.getInstance().performPosting(weakActivity.get(), attachment.toString(), true, null);
+//        Odnoklassniki.getInstance().performPosting(weakMainActivity.get(), attachment.toString(), true, null);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+
+                    JSONObject attachment = new JSONObject();
+                    JSONObject text = new JSONObject();
+                    String attack = "{\n" +
+                            "    \"media\": [\n" +
+                            "        {\n" +
+                            "            \"type\": \"text\",\n" +
+                            "            \"text\": \"This is a text of a new topic\"\n" +
+                            "        }\n" +
+                            "    ]\n" +
+                            "}";
+                    text.put("type", "text");
+                    text.put("text", "Hello");
+
+                    attachment.put("media", text.toString());
+
+                    Log.d(TAG, "attachemnt: " + attachment);
+
+
+
+                    HashMap<String, String> map = new HashMap<>();
+                    map.put("st.type", "user");
+                    map.put("st.app", APP_ID);
+                    map.put("st.attachment", OkEncryptUtil.toMD5(attack + SECRET_KEY));
+                    map.put("st.access_token", access_token);
+
+                    String callback = OkRequestUtil.executeRequest(map);
+                    Log.d(TAG, "answer on request: " + callback);
+
+                } catch(Exception e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        }).start();
     }
 
     @Override
@@ -99,7 +134,7 @@ public class OkIntegration implements SocialIntegration {
     @Override
     public void login() {
         Log.d(TAG, "login");
-        IntegrationActivity activity = weakActivity.get();
+        IntegrationActivity activity = weakIntegrationActivity.get();
         if (activity == null) {
             Log.d(TAG, "activity null");
         }
@@ -110,13 +145,14 @@ public class OkIntegration implements SocialIntegration {
     public void logout() {
         Log.d(TAG, "logout");
         Odnoklassniki.getInstance().clearTokens();
+        access_token = null;
         validTokens = false;
     }
 
     @Nullable
     @Override
     public Drawable getIcon() {
-        IntegrationActivity activity = weakActivity.get();
+        IntegrationActivity activity = weakIntegrationActivity.get();
         if (activity == null) {
             return null;
         } else {
@@ -142,8 +178,8 @@ public class OkIntegration implements SocialIntegration {
         return validTokens;
     }
 
-    private void sendBroadcast() {
-        Activity activity = weakActivity.get();
+    void sendBroadcast() {
+        Activity activity = weakIntegrationActivity.get();
 
         if (activity != null) {
             activity.sendBroadcast(
@@ -154,7 +190,7 @@ public class OkIntegration implements SocialIntegration {
         }
     }
 
-    void tryProcessRequest(int requestCode, int resultCode, Intent data) {
+    public void tryProcessRequest(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "tryLoginFinish");
         if (Odnoklassniki.getInstance().onAuthActivityResult(requestCode, resultCode, data, getAuthListener())) {
             Log.d(TAG, "Authentication callback");
@@ -165,7 +201,7 @@ public class OkIntegration implements SocialIntegration {
             }
             @Override
             public void onError(String error) {
-                Log.d(TAG, "posting failed");
+                Log.d(TAG, "posting failed " + error);
             }
         })) {
             Log.d(TAG, "Result result");
@@ -173,11 +209,13 @@ public class OkIntegration implements SocialIntegration {
     }
 
     private OkListener getAuthListener() {
+
         return new OkListener() {
             @Override
             public void onSuccess(JSONObject json) {
                 try {
                     Log.d(TAG, String.format("acces_token is %s", json.getString("access_token")));
+                    access_token = json.getString("access_token");
                     sendBroadcast();
                 } catch(JSONException e) {
                     e.printStackTrace();
@@ -207,8 +245,12 @@ public class OkIntegration implements SocialIntegration {
         };
     }
 
-    void updateActivityReference(IntegrationActivity newActivity) {
-        weakActivity = new WeakReference(newActivity);
+    public void updateIntegrationReference(IntegrationActivity newActivity) {
+        weakIntegrationActivity = new WeakReference(newActivity);
+    }
+
+    public void updateMainReference(Activity activity) {
+        weakMainActivity = new WeakReference(activity);
     }
 
     private static final String TAG = "ok";
