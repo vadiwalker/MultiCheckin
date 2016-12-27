@@ -35,6 +35,7 @@ import ru.ok.android.sdk.util.OkScope;
 
 public class OkIntegration implements SocialIntegration {
 
+
     private static final String APP_ID = "1249212672";
     private static final String PUBLIC_KEY = "CBAKHGHLEBABABABA";
     private static final String SECRET_KEY = "EFC90F68D96FB26BDD678927";
