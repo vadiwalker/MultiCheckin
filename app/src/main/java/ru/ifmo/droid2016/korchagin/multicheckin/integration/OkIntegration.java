@@ -14,7 +14,6 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.lang.ref.WeakReference;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
@@ -24,9 +23,6 @@ import ru.ok.android.sdk.OkListener;
 import ru.ok.android.sdk.util.OkAuthType;
 import ru.ok.android.sdk.util.OkScope;
 
-/**
- * Created by vadim on 24.12.16.
- */
 
 public class OkIntegration implements SocialIntegration {
 
@@ -37,7 +33,7 @@ public class OkIntegration implements SocialIntegration {
 
     private static OkIntegration instance = null;
     private boolean validTokens = false;
-    WeakReference<IntegrationActivity> weakActivity = new WeakReference<>(null);;
+    private WeakReference<IntegrationActivity> weakActivity = new WeakReference<>(null);;
 
     private OkIntegration() {
         Odnoklassniki.getInstance().checkValidTokens(getValidationListener());
@@ -146,7 +142,7 @@ public class OkIntegration implements SocialIntegration {
         return validTokens;
     }
 
-    void sendBroadcast() {
+    private void sendBroadcast() {
         Activity activity = weakActivity.get();
 
         if (activity != null) {
@@ -158,7 +154,7 @@ public class OkIntegration implements SocialIntegration {
         }
     }
 
-    public void tryProcessRequest(int requestCode, int resultCode, Intent data) {
+    void tryProcessRequest(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "tryLoginFinish");
         if (Odnoklassniki.getInstance().onAuthActivityResult(requestCode, resultCode, data, getAuthListener())) {
             Log.d(TAG, "Authentication callback");
@@ -211,7 +207,7 @@ public class OkIntegration implements SocialIntegration {
         };
     }
 
-    public void updateActivityReference(IntegrationActivity newActivity) {
+    void updateActivityReference(IntegrationActivity newActivity) {
         weakActivity = new WeakReference(newActivity);
     }
 

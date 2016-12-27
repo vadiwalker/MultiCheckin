@@ -2,10 +2,6 @@ package ru.ifmo.droid2016.korchagin.multicheckin.integration;
 
 import android.support.annotation.IntDef;
 
-/**
- * Created by ME on 19.12.2016.
- */
-
 @IntDef(value = {
         SocialIdentifier.VK_LOGIN,
         SocialIdentifier.TWITTER_AUTH

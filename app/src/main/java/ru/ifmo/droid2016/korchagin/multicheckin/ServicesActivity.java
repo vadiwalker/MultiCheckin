@@ -4,10 +4,6 @@ import android.preference.PreferenceActivity;
 
 import java.util.List;
 
-/**
- * Created by ME on 17.12.2016.
- */
-
 public class ServicesActivity extends PreferenceActivity {
     @Override
     public void onBuildHeaders(List<Header> target) {

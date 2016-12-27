@@ -82,7 +82,8 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onBackPressed() {
         if (currentStep == null) {
-            // TODO один раз здесь у меня появился null, кому-нибудь надо разобраться (исходно if-а не было)
+            super.finish();
+            finish();
             return;
         }
 
@@ -106,7 +107,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(savedInstanceState != null){
-            image = (Bitmap)savedInstanceState.getParcelable(IMAGE_STORE_TAG);
+            image = savedInstanceState.getParcelable(IMAGE_STORE_TAG);
         }
         setContentView(R.layout.activity_main);
 

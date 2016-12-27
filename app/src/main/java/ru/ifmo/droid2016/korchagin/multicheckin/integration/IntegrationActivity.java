@@ -9,7 +9,6 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.View;
 
 import com.facebook.CallbackManager;
 
@@ -20,8 +19,6 @@ import java.util.Vector;
 import ru.ifmo.droid2016.korchagin.multicheckin.R;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.MRecyclerAdapter;
-import ru.ok.android.sdk.Odnoklassniki;
-import twitter4j.TwitterException;
 
 public class IntegrationActivity extends AppCompatActivity {
     static final String LOG_TAG = "facebook_integration";
@@ -37,7 +34,6 @@ public class IntegrationActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager mLayoutManager;
 
     private Map<String, Integer> posInAdapter = new TreeMap<>(); // Позиция в адаптере
-    // после успешного логирования надо вызвать у mAdapter notifyItemChanged()
 
     private BroadcastReceiver networkLoggingReceiver;
 
@@ -49,7 +45,6 @@ public class IntegrationActivity extends AppCompatActivity {
                     String name = intent.getStringExtra(NETWORK_NAME);
 
                     Log.d("INTEGRATION_ACTIVITY", name);
-
                     Log.d("INTEGRATION_ACTIVITY", "Залогинился номер :" + posInAdapter.get(name));
 
                     mAdapter.notifyItemChanged(posInAdapter.get(name));
@@ -113,12 +108,6 @@ public class IntegrationActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         unregisterReceivers();
-    }
-
-    public void onClickFacebookDebug(View view) {
-        Intent intent = new Intent().setClassName(this, "ru.ifmo.droid2016.korchagin.multicheckin.FacebookDebugActivity");
-
-        startActivity(intent);
     }
 
 }

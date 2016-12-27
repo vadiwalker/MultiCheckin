@@ -1,15 +1,12 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.integration;
 
-import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.evernote.android.job.Job;
 
-/**
- * Created by Vlad_kv on 18.12.2016.
- */
+
 
 public interface SocialIntegration {
 

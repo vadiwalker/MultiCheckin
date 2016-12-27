@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.Map;
 import java.util.Vector;
 
@@ -24,8 +25,8 @@ import ru.ifmo.droid2016.korchagin.multicheckin.integration.SocialIntegration;
 public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.ViewHolder> {
 
 
-    protected Vector<SocialIntegration> socialNetworks = new Vector<>();
-    private static Activity activity = null;
+    private Vector<SocialIntegration> socialNetworks = new Vector<>();
+    private static WeakReference<Activity> weakReference = null;
     public Vector<SocialIntegration> getData() {
         return socialNetworks;
     }
@@ -33,12 +34,12 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public ImageView iconOfNetwork;
-        public TextView nameOfNetwork;
-        public CheckBox statusOfNetwork;
-        public ImageButton loginLogoutButton;
+        private ImageView iconOfNetwork;
+        private TextView nameOfNetwork;
+        private CheckBox statusOfNetwork;
+        private ImageButton loginLogoutButton;
 
-        public ViewHolder(View v) {
+        private ViewHolder(View v) {
             super(v);
 
             iconOfNetwork = (ImageView) v.findViewById(R.id.icon_of_network);
@@ -47,26 +48,28 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
             loginLogoutButton = (ImageButton) v.findViewById(R.id.login_logout_button);
         }
 
-        public void onLogin() {
-            loginLogoutButton.setImageDrawable(activity.getResources().getDrawable(R.mipmap.ic_logout));
-            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.login_logout_stretching_animation);
+        private void onLogin() {
+            if (weakReference.get() == null) {
+                return;
+            }
+            loginLogoutButton.setImageDrawable(weakReference.get().getResources().getDrawable(R.mipmap.ic_logout));
+            Animation animation = AnimationUtils.loadAnimation(weakReference.get(), R.anim.login_logout_stretching_animation);
             loginLogoutButton.startAnimation(animation);
         }
 
-        public void onLogout() {
-            loginLogoutButton.setImageDrawable(activity.getResources().getDrawable(R.mipmap.ic_login));
-            Animation animation = AnimationUtils.loadAnimation(activity, R.anim.login_logout_stretching_animation);
+        private void onLogout() {
+            loginLogoutButton.setImageDrawable(weakReference.get().getResources().getDrawable(R.mipmap.ic_login));
+            Animation animation = AnimationUtils.loadAnimation(weakReference.get(), R.anim.login_logout_stretching_animation);
             loginLogoutButton.startAnimation(animation);
         }
     }
 
     public MRecyclerAdapter(Vector<SocialIntegration> socialNetworks, Map<String, Integer> posInAdapter, Activity activity) {
         super();
-        this.activity = activity;
+        weakReference = new WeakReference<>(activity);
         this.socialNetworks = socialNetworks;
 
         prevState = new boolean[socialNetworks.size()];
-
 
         int pos = 0;
         for(SocialIntegration w : socialNetworks) {
@@ -109,9 +112,9 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
         prevState[position] = status;
 
         if (status) {
-            holder.loginLogoutButton.setImageDrawable(activity.getResources().getDrawable(R.mipmap.ic_logout));
+            holder.loginLogoutButton.setImageDrawable(weakReference.get().getResources().getDrawable(R.mipmap.ic_logout));
         } else {
-            holder.loginLogoutButton.setImageDrawable(activity.getResources().getDrawable(R.mipmap.ic_login));
+            holder.loginLogoutButton.setImageDrawable(weakReference.get().getResources().getDrawable(R.mipmap.ic_login));
         }
 
         if (status) {
@@ -135,7 +138,7 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
                             Integer res = MainApplication.selectedSocialIntegrations.get(socialIntegration.getNetworkName());
 
                             MainApplication.selectedSocialIntegrations.put(socialIntegration.getNetworkName(), res ^ 1);
-                            SharedPreferencesUtil.saveSelectionStatus(activity.getApplicationContext(), socialIntegration.getNetworkName(), res ^ 1);
+                            SharedPreferencesUtil.saveSelectionStatus(weakReference.get().getApplicationContext(), socialIntegration.getNetworkName(), res ^ 1);
                             notifyItemChanged(position);
                         }
                     }
@@ -146,28 +149,7 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
         holder.loginLogoutButton.setOnClickListener(
                 new View.OnClickListener() {
                     private final MRecyclerAdapter.ViewHolder mHolder = holder;
-                    private Animation animation = null;
-
-                    class MyListener implements Animation.AnimationListener {
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mHolder.loginLogoutButton.setVisibility(View.VISIBLE);
-                            Log.d("anim", "end");
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                            mHolder.loginLogoutButton.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            mHolder.loginLogoutButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    MyListener myListener = null;
-
+                    
                     @Override
                     public void onClick(View v) {
                         int position = mHolder.getAdapterPosition();
@@ -176,13 +158,9 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
 
                             notifyItemChanged(position);
                         } else {
-                            animation = AnimationUtils.loadAnimation(activity, R.anim.login_logout_animation);
+                            Animation animation = AnimationUtils.loadAnimation(weakReference.get(), R.anim.login_logout_animation);
 
-                            myListener = new MyListener();
-
-                            animation.setAnimationListener(myListener);
                             mHolder.loginLogoutButton.startAnimation(animation);
-
                             socialNetworks.elementAt(position).login();
                         }
                     }
@@ -193,10 +171,5 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
     @Override
     public int getItemCount() {
         return socialNetworks.size();
-    }
-
-    public void addItemToEnd(SocialIntegration element) {
-        socialNetworks.addElement(element);
-        notifyItemChanged(socialNetworks.size() - 1);
     }
 }

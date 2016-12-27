@@ -14,7 +14,7 @@ import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
  * Created by ME on 20.12.2016.
  */
 
-public class MyJobCreator implements JobCreator{
+class MyJobCreator implements JobCreator{
     private static final String TAG = "JobCreator";
     @Override
     public Job create(String tag) {
