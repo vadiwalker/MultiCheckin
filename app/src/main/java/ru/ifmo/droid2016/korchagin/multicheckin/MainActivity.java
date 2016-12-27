@@ -3,6 +3,7 @@ package ru.ifmo.droid2016.korchagin.multicheckin;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -127,11 +128,6 @@ public class MainActivity extends AppCompatActivity  {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        String[] fingerprints = VKUtil.getCertificateFingerprint(this, this.getPackageName());
-        Log.e("CERT", fingerprints[0]);
-        Toast t = Toast.makeText(getBaseContext(), fingerprints[0], Toast.LENGTH_LONG);
-        t.show();
     }
 
     class SendBtnListener implements View.OnClickListener{

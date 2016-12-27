@@ -6,5 +6,5 @@
         android:singleLine="true"
         android:title="@string/step2_default_pref"
         android:key="step2_default_pref"
-        android:summary="If you enter no message, this will be used" />
+        android:summary="@string/step2_default_pref_summary" />
 </PreferenceScreen>

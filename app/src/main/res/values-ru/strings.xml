@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Multi Checkin</string>
     <string name="action_settings">Настройки</string>
     <string name="hint1_camera">Камера</string>
     <string name="hint1_file">Файл</string>
@@ -14,4 +13,9 @@
     <string name="social_network_icon">Иконка социальной сети</string>
     <string name="services_settings">Социальные сети</string>
     <string name="social_settings_hint">Выберите, куда отправлять ваши фотографии</string>
+    <string name="vk_name">Вконтакте</string>
+    <string name="step2_default_pref">Сообщение по умолчанию</string>
+    <string name="step2_default_pref_summary">Если строка сообщения оставлена пустой, будет отправлено это сообщение</string>
+    <string name="settings_header_name">Настройки</string>
+    <string name="settings_header_summary">Настройки приложения</string>
 </resources>

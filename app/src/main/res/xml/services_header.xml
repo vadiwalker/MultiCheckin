@@ -5,7 +5,7 @@
 
     <header
         android:fragment="ru.ifmo.droid2016.korchagin.multicheckin.ServicesFragment"
-        android:title="Service integration settings"
-        android:summary="What services you want to post your pictures to." />
+        android:title="@string/settings_header_name"
+        android:summary="@string/settings_header_summary" />
 
 </preference-headers>
