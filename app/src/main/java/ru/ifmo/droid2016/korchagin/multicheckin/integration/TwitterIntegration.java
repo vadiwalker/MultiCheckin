@@ -23,9 +23,6 @@ import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
 
-/**
- * Created by ME on 20.12.2016.
- */
 
 public class TwitterIntegration implements SocialIntegration {
 
@@ -39,7 +36,7 @@ public class TwitterIntegration implements SocialIntegration {
         return new TwitterSendJob();
     }
 
-    public static class TwitterSendJob extends Job {
+    static class TwitterSendJob extends Job {
         public static final String TAG = "SendPhotoToTwitterJob";
         @NonNull
         @Override
@@ -62,9 +59,9 @@ public class TwitterIntegration implements SocialIntegration {
 
     private static final String TAG = "TwitterIntegration";
 
-    public static final String TOKEN = "twitter_auth_token";
+    static final String TOKEN = "twitter_auth_token";
 
-    public static final String SECRET = "twitter_auth_token_secret";
+    static final String SECRET = "twitter_auth_token_secret";
 
     private WeakReference<Activity> weakActivity;
 
@@ -83,7 +80,7 @@ public class TwitterIntegration implements SocialIntegration {
         }
     }
 
-    public void updateActivityReference(Activity activity){
+    void updateActivityReference(Activity activity){
         weakActivity = new WeakReference<>(activity);
     }
 
@@ -155,7 +152,7 @@ public class TwitterIntegration implements SocialIntegration {
         }
     }
 
-    public void tryLoginFinish(int requestCode, int resultCode, Intent data){
+    void tryLoginFinish(int requestCode, int resultCode, Intent data){
         if(getStatus()){
             Log.d(TAG, "Twitter login successful");
             Activity activity = weakActivity.get();

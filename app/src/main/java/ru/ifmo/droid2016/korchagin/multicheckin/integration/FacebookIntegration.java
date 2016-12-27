@@ -3,7 +3,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -19,8 +18,6 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -50,63 +47,7 @@ public class FacebookIntegration implements SocialIntegration {
         }
     }
 
-    public void testRequest() {
-        if (AccessToken.getCurrentAccessToken() == null) {
-            Log.d(LOG_TAG, "in testRequest no AccessToken");
-            return;
-        }
-
-        GraphRequest request = GraphRequest.newMeRequest(
-                AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
-                        Log.d(LOG_TAG, response.toString() + "\n" + object.toString());
-                    }
-                }
-        );
-
-        Bundle parameters = new Bundle();
-        parameters.putString("fields", "id,name,link");
-        request.setParameters(parameters);
-        request.executeAsync();
-    }
-
-    public void testRequest_2(String string) {
-        if (AccessToken.getCurrentAccessToken() == null) {
-            Log.d(LOG_TAG, "in testRequest_2 no AccessToken");
-            return;
-        }
-
-        JSONObject jsonObject = null;
-
-        try {
-            jsonObject = new JSONObject("{\"message\" : \"" + string + "\"}");
-        } catch (Exception ex) {
-            Log.d(LOG_TAG, ex.toString());
-            return;
-        }
-
-        GraphRequest request = GraphRequest.newPostRequest(
-                AccessToken.getCurrentAccessToken(),
-                "/me/feed",
-                jsonObject,
-                new GraphRequest.Callback() {
-                    @Override
-                    public void onCompleted(GraphResponse graphResponse) {
-                        Log.d(LOG_TAG, "Ответ : " + graphResponse.toString());
-                    }
-                }
-        );
-
-
-
-        Log.d(LOG_TAG, " Запрос: " + request.toString());
-
-        request.executeAsync();
-    }
-
-    public boolean sendPhotosForJob(@NonNull Bitmap photo, @Nullable final String comment, final int newJobId) {
+    private boolean sendPhotosForJob(@NonNull Bitmap photo, @Nullable final String comment, final int newJobId) {
         if (AccessToken.getCurrentAccessToken() == null) {
             Log.d(LOG_TAG, "in testRequest_3 no AccessToken");
             return false;
@@ -154,7 +95,7 @@ public class FacebookIntegration implements SocialIntegration {
     }
 
     private static class FacebookSendJob extends Job {
-        public static final String TAG = "SendPhotoToFacebookJob";
+        static final String TAG = "SendPhotoToFacebookJob";
 
         @NonNull
         @Override
@@ -173,7 +114,7 @@ public class FacebookIntegration implements SocialIntegration {
         }
     }
 
-    public CallbackManager init(IntegrationActivity newActivity) {
+    CallbackManager init(IntegrationActivity newActivity) {
         weakActivity = new WeakReference<Activity>(newActivity);
 
         CallbackManager facebookCallbackManager = CallbackManager.Factory.create();

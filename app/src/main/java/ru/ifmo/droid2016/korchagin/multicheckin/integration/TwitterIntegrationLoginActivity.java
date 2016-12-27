@@ -89,7 +89,7 @@ public class TwitterIntegrationLoginActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString(TwitterIntegration.TOKEN, accessToken.getToken());
             editor.putString(TwitterIntegration.SECRET, accessToken.getTokenSecret());
-            editor.commit();
+            editor.apply();
             setResult(RESULT_OK);
             finish();
         } else {

@@ -1,15 +1,13 @@
 package ru.ifmo.droid2016.korchagin.multicheckin.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.MainApplication;
-import ru.ifmo.droid2016.korchagin.multicheckin.integration.SocialIntegration;
 
 class SharedPreferencesUtil {
-    public static void saveSelectionStatus(Context context, String name, int val) {
+    static void saveSelectionStatus(Context context, String name, int val) {
         SharedPreferences mySharedPreferences = context.getSharedPreferences(MainApplication.APP_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor edit = mySharedPreferences.edit();
 

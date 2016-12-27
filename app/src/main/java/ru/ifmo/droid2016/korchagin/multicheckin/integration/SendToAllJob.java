@@ -13,10 +13,6 @@ import java.util.Vector;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
 
-/**
- * Created by ME on 20.12.2016.
- */
-
 public class SendToAllJob extends Job {
 
     public static final String TAG = "SendToAllNetworksJob";
