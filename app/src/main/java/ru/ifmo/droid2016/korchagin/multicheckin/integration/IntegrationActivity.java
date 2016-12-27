@@ -86,7 +86,7 @@ public class IntegrationActivity extends AppCompatActivity {
 
         VKIntegration.getInstance().updateActivityReference(this);
         TwitterIntegration.getInstance().updateActivityReference(this);
-        OkIntegration.getInstance().updateActivityReference(this);
+        OkIntegration.getInstance().updateIntegrationReference(this);
 
         facebookCallbackManager = FacebookIntegration.getInstance().init(this);
     }
