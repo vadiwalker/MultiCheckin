@@ -24,5 +24,6 @@
     <string name="step2_default_pref_summary">If you enter no message, this will be used</string>
     <string name="settings_header_name">General</string>
     <string name="settings_header_summary">General application settings</string>
+    <string name="step1_notempfile">Unable to create temporary file</string>
 
 </resources>

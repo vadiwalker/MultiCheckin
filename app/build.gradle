@@ -1,14 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    signingConfigs {
-        defRelease {
-            keyAlias 'Android-16 release key'
-            keyPassword 'droid16IFMO'
-            storeFile file('C:/Users/ME/AndroidStudioProjects/keys.jks')
-            storePassword '12qwASzx'
-        }
-    }
+
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {
@@ -25,8 +18,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    productFlavors {
-    }
+
 }
 
 repositories {

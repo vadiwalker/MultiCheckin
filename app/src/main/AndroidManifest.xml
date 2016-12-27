@@ -57,11 +57,21 @@
         </activity>
 
         <activity android:name=".integration.IntegrationActivity" />
-        <activity android:name=".integration.TwitterIntegrationLoginActivity"></activity>
+        <activity android:name=".integration.TwitterIntegrationLoginActivity"/>
         <provider
             android:name="com.facebook.FacebookContentProvider"
             android:authorities="@string/provider_authorities"
             android:exported="true" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="ru.ifmo.droid2016.korchagin.multicheckin"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"/>
+        </provider>
+
     </application>
 
 </manifest>

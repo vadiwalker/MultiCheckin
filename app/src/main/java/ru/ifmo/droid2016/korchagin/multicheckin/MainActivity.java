@@ -11,6 +11,7 @@ import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.vk.sdk.util.VKUtil;
 
+import java.io.File;
 import java.io.IOException;
 
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.SendToAllJob;
@@ -45,6 +47,8 @@ public class MainActivity extends AppCompatActivity  {
     private EditText commentText;
     private Bitmap image;
 
+    private Uri imageTempFile;
+
     private static final String IMAGE_STORE_TAG = "ActualImage";
 
     private static final int REQUEST_PICTURE_CAPTURE = 1;
@@ -61,10 +65,14 @@ public class MainActivity extends AppCompatActivity  {
 
         switch (requestCode) {
             case REQUEST_PICTURE_CAPTURE :
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                if(imageBitmap != null){
-                    gotoStep2(imageBitmap);
+                Bitmap imageBitmap = null;
+                try{
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageTempFile);
+                    if(imageBitmap != null){
+                        gotoStep2(imageBitmap);
+                    }
+                } catch (IOException e){
+                    // silent
                 }
                 break;
             case REQUEST_PICTURE_FROM_FILE :
@@ -190,7 +198,19 @@ public class MainActivity extends AppCompatActivity  {
             errorToast.show();
             return;
         }
-        startActivityForResult(takePictureIntent, REQUEST_PICTURE_CAPTURE);
+        File tempFile = BitmapFileUtil.getTempImageFile(getApplicationContext());
+
+        if (tempFile != null) {
+            imageTempFile = FileProvider.getUriForFile(getApplicationContext(),
+                    "ru.ifmo.droid2016.korchagin.multicheckin",
+                    tempFile);
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageTempFile);
+            startActivityForResult(takePictureIntent, REQUEST_PICTURE_CAPTURE);
+        } else {
+            Toast errorToast = Toast.makeText(getBaseContext(), R.string.step1_notempfile, Toast.LENGTH_SHORT);
+            errorToast.show();
+        }
+
     }
 
     public void gotoStep2(@NonNull Bitmap image){

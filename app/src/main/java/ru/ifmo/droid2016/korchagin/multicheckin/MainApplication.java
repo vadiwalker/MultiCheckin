@@ -25,6 +25,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         VKSdk.initialize(getApplicationContext());
 
         FacebookSdk.sdkInitialize(getApplicationContext());

@@ -18,4 +18,5 @@
     <string name="step2_default_pref_summary">Если строка сообщения оставлена пустой, будет отправлено это сообщение</string>
     <string name="settings_header_name">Настройки</string>
     <string name="settings_header_summary">Настройки приложения</string>
+    <string name="step1_notempfile">Не получилось создать временный файл</string>
 </resources>
