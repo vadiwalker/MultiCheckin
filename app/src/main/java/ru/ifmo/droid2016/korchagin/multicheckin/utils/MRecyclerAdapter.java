@@ -149,27 +149,7 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
         holder.loginLogoutButton.setOnClickListener(
                 new View.OnClickListener() {
                     private final MRecyclerAdapter.ViewHolder mHolder = holder;
-                    private Animation animation = null;
-
-                    class MyListener implements Animation.AnimationListener {
-                        @Override
-                        public void onAnimationEnd(Animation animation) {
-                            mHolder.loginLogoutButton.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
-                            mHolder.loginLogoutButton.setVisibility(View.VISIBLE);
-                        }
-
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-                            mHolder.loginLogoutButton.setVisibility(View.VISIBLE);
-                        }
-                    }
-
-                    MyListener myListener = null;
-
+                    
                     @Override
                     public void onClick(View v) {
                         int position = mHolder.getAdapterPosition();
@@ -178,13 +158,9 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
 
                             notifyItemChanged(position);
                         } else {
-                            animation = AnimationUtils.loadAnimation(weakReference.get(), R.anim.login_logout_animation);
+                            Animation animation = AnimationUtils.loadAnimation(weakReference.get(), R.anim.login_logout_animation);
 
-                            myListener = new MyListener();
-
-                            animation.setAnimationListener(myListener);
                             mHolder.loginLogoutButton.startAnimation(animation);
-
                             socialNetworks.elementAt(position).login();
                         }
                     }

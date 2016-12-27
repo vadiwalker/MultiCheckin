@@ -45,10 +45,10 @@ public class SendToAllJob extends Job {
 
         Log.d("NEW", String.valueOf(vector.size()));
 
-        for (SocialIntegration AbstractIntegration : vector) {
-            Log.d("NEW", AbstractIntegration.getSandJobTag());
+        for (SocialIntegration abstractIntegration : vector) {
+            Log.d("NEW", abstractIntegration.getSandJobTag());
 
-            new JobRequest.Builder(AbstractIntegration.getSandJobTag()) // build Abstract-Job
+            new JobRequest.Builder(abstractIntegration.getSandJobTag()) // build Abstract-Job
                     .setExtras(extras)
                     .setExecutionWindow(executionWindowStart, executionWindowEnd)
                     .setBackoffCriteria(15_000L, JobRequest.BackoffPolicy.LINEAR)
