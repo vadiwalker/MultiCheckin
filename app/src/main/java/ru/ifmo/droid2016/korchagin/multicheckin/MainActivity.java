@@ -120,6 +120,14 @@ public class MainActivity extends AppCompatActivity  {
         commentText = (EditText) findViewById(R.id.commentText);
         imageView = (ImageView)  findViewById(R.id.step2_image);
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String defaultComment = prefs.getString("step2_default_pref", null);
+
+        if(defaultComment != null && defaultComment.length() > 0){
+            commentText.setHint(defaultComment + "(Your default message)");
+        }
+
+
         step1 = new View[4];
         step1[0] = findViewById(R.id.step1_hint);
         step1[1] = findViewById(R.id.step1_textOr);

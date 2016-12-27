@@ -53,7 +53,7 @@ public class BitmapFileUtil {
         try {
             tempFile = File.createTempFile("img", ".png");
             fos = new FileOutputStream(tempFile);
-            result = image.compress(Bitmap.CompressFormat.PNG, 100, fos);
+            result = image.compress(Bitmap.CompressFormat.JPEG, 92, fos);
         } catch (IOException e){
         } finally {
             if(fos != null)
