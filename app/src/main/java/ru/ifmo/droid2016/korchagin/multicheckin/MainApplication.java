@@ -15,6 +15,7 @@ import java.util.TreeMap;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.OkIntegration;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.SocialIntegration;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.TwitterIntegration;
+import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.IntegrationsUtil;
 import ru.ok.android.sdk.Odnoklassniki;
 
@@ -24,6 +25,7 @@ public class MainApplication extends Application {
 
     @Override
     public void onCreate() {
+
         super.onCreate();
 
         VKSdk.initialize(getApplicationContext());
@@ -31,6 +33,10 @@ public class MainApplication extends Application {
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         JobManager.create(this).addJobCreator(new MyJobCreator());
+
+        if(JobManager.instance().getAllJobs().isEmpty()){
+            BitmapFileUtil.clearCacheFromImages();
+        }
 
         TwitterIntegration.getInstance();
         TwitterIntegration.getInstance().applicationInit(getApplicationContext());
