@@ -24,6 +24,7 @@ import android.widget.Toast;
 
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
+import com.squareup.picasso.Picasso;
 import com.vk.sdk.util.VKUtil;
 
 import java.io.File;
@@ -45,7 +46,6 @@ public class MainActivity extends AppCompatActivity  {
 
     private ImageView imageView;
     private EditText commentText;
-    private Bitmap image;
 
     private Uri imageTempFile;
 
@@ -69,17 +69,19 @@ public class MainActivity extends AppCompatActivity  {
                 try{
                     imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageTempFile);
                     if(imageBitmap != null){
-                        gotoStep2(imageBitmap);
+                        gotoStep2(imageTempFile);
                     }
                 } catch (IOException e){
                     // silent
                 }
                 break;
             case REQUEST_PICTURE_FROM_FILE :
-                Uri fileUri = data.getData();
+                Uri image = data.getData();
                 try{
-                    imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), fileUri);
-                    gotoStep2(imageBitmap);
+                    imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), image);
+                    if(imageBitmap != null) {
+                        gotoStep2(image);
+                    }
                 } catch (IOException e){
                     // silent
                 }
@@ -107,15 +109,12 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(IMAGE_STORE_TAG, image);
+        outState.putParcelable(IMAGE_STORE_TAG, imageTempFile);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(savedInstanceState != null){
-            image = savedInstanceState.getParcelable(IMAGE_STORE_TAG);
-        }
         setContentView(R.layout.activity_main);
 
         commentText = (EditText) findViewById(R.id.commentText);
@@ -136,19 +135,28 @@ public class MainActivity extends AppCompatActivity  {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        if(savedInstanceState != null){
+            imageTempFile = savedInstanceState.getParcelable(IMAGE_STORE_TAG);
+            if(imageTempFile != null){
+                gotoStep2(imageTempFile);
+            }
+        }
     }
 
     class SendBtnListener implements View.OnClickListener{
 
         @Override
         public void onClick(View v) {
+            Log.d("Sender", "Beginning send");
             PersistableBundleCompat extras = new PersistableBundleCompat();
-            String pathToImage = BitmapFileUtil.writeToCacheAndGivePath(image);
+            String pathToImage = BitmapFileUtil.writeToCacheAndGivePath(imageTempFile, getBaseContext());
             if(pathToImage == null){
                 Log.e("Sender", "Unable to save image to cache");
+                return;
             } else {
                 extras.putString(SendToAllJob.PHOTO_TAG, pathToImage);
-                image = null;
+                imageTempFile = null;
             }
             String comment;
             if(commentText.getText() == null || commentText.getText().length() == 0){
@@ -182,6 +190,7 @@ public class MainActivity extends AppCompatActivity  {
             Toast errorToast = Toast.makeText(getBaseContext(), R.string.step1_nofile, Toast.LENGTH_SHORT);
             errorToast.show();
         }
+        Picasso.with(this).load(imageTempFile).into(imageView);
         startActivityForResult(intent, REQUEST_PICTURE_FROM_FILE);
     }
 
@@ -212,9 +221,9 @@ public class MainActivity extends AppCompatActivity  {
 
     }
 
-    public void gotoStep2(@NonNull Bitmap image){
-        this.image = image;
-        imageView.setImageBitmap(image);
+    public void gotoStep2(@NonNull Uri image){
+        this.imageTempFile = image;
+        Picasso.with(this).load(image).into(imageView);
         for (View view: step1) {
             view.setVisibility(View.INVISIBLE);
         }
@@ -232,6 +241,7 @@ public class MainActivity extends AppCompatActivity  {
         for (View view: step2) {
             view.setVisibility(View.INVISIBLE);
         }
+        imageTempFile = null;
         imageView.setImageDrawable(null);
     }
 

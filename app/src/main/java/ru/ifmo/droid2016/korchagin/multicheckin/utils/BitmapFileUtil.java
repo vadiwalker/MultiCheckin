@@ -3,7 +3,11 @@ package ru.ifmo.droid2016.korchagin.multicheckin.utils;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Environment;
+import android.provider.MediaStore;
+
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,6 +33,16 @@ public class BitmapFileUtil {
         }
         tempFile.deleteOnExit();
         return tempFile;
+    }
+
+    public static String writeToCacheAndGivePath(Uri uri, Context context){
+        try {
+            Bitmap image = MediaStore.Images.Media.getBitmap(context.getContentResolver(), uri);
+            return writeToCacheAndGivePath(image);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String writeToCacheAndGivePath(Bitmap image){
