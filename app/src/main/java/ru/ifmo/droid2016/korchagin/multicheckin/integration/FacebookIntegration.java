@@ -263,7 +263,7 @@ public class FacebookIntegration implements SocialIntegration {
 
     @Override
     @NonNull public String getNetworkName() {
-        return "@strings.";
+        return "Facebook";
     }
 
 }

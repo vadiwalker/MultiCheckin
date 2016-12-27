@@ -73,10 +73,9 @@ public class IntegrationActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        mAdapter = new MRecyclerAdapter(IntegrationsUtil.getAllIntegrations(), posInAdapter);
         Vector<SocialIntegration> networks = IntegrationsUtil.getAllIntegrations();
 
-        mAdapter = new MRecyclerAdapter(networks, posInAdapter);
+        mAdapter = new MRecyclerAdapter(networks, posInAdapter, this);
         mRecyclerView.setAdapter(mAdapter);
 
         // TODO КАЖДОМУ послать broadcast после успешного логирования!

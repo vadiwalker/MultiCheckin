@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:baselineAligned="false">
 
 
     <ImageView
-        android:layout_width="60dp"
+        android:layout_width="@dimen/dimens_of_recycle_view"
         android:layout_height="60dp"
         app:srcCompat="@android:drawable/ic_delete"
         android:id="@+id/icon_of_network"
@@ -20,15 +22,20 @@
         android:textSize="30sp"
         android:layout_height="match_parent"
         android:id="@+id/name_of_network"
-        android:layout_width="200sp" />
+        android:layout_width="0dp" />
 
     <CheckBox
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/status_of_network" />
+    <ImageButton
+        android:layout_gravity="center"
 
-        android:text=""
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/status_of_network"
-        android:layout_weight="1"
-        />
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        app:srcCompat="@mipmap/ic_login"
+        android:id="@+id/login_logout_button"
+
+        android:background="@color/login_logout_button_color" />
 
 </LinearLayout>

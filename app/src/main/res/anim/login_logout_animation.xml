@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <scale
+        android:duration="@dimen/duration_in_login_logout_animation"
+        android:fromXScale="@dimen/start_scale_in_login_logout_animation"
+        android:fromYScale="@dimen/start_scale_in_login_logout_animation"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="@dimen/end_scale_in_login_logout_animation"
+        android:toYScale="@dimen/end_scale_in_login_logout_animation" />
+
+    <scale
+        android:duration="@dimen/duration_in_login_logout_animation"
+        android:fromXScale="@dimen/end_scale_in_login_logout_animation"
+        android:fromYScale="@dimen/end_scale_in_login_logout_animation"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:startOffset="750"
+        android:toXScale="@dimen/start_scale_in_login_logout_animation"
+        android:toYScale="@dimen/start_scale_in_login_logout_animation" />
+</set>
