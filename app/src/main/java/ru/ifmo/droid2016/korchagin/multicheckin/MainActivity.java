@@ -90,8 +90,7 @@ public class MainActivity extends AppCompatActivity  {
     @Override
     public void onBackPressed() {
         if (currentStep == null) {
-            super.finish();
-            finish();
+            super.onBackPressed();
             return;
         }
 
