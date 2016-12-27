@@ -55,22 +55,4 @@ public class MainApplication extends Application {
             selectedSocialIntegrations.put(w.getNetworkName(), res);
         }
     }
-
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-
-        SharedPreferences mySharedPreferences = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor edit = mySharedPreferences.edit();
-
-        for (SocialIntegration w : IntegrationsUtil.getAllIntegrations()) {
-            if (w.getStatus()) {
-                Log.d("LOG", "put " + w.getNetworkName());
-                edit.putInt(w.getNetworkName(), 1);
-            }
-        }
-        edit.apply();
-
-        Log.d("LOG", " onTerminate");
-    }
 }

@@ -129,13 +129,13 @@ public class MRecyclerAdapter extends RecyclerView.Adapter<MRecyclerAdapter.View
 
                         @Override
                         public void onClick(View v) {
-                            //mHolder.onLogin();
                             int position = mHolder.getAdapterPosition();
 
                             SocialIntegration socialIntegration = socialNetworks.elementAt(mHolder.getAdapterPosition());
                             Integer res = MainApplication.selectedSocialIntegrations.get(socialIntegration.getNetworkName());
 
                             MainApplication.selectedSocialIntegrations.put(socialIntegration.getNetworkName(), res ^ 1);
+                            SharedPreferencesUtil.saveSelectionStatus(activity.getApplicationContext(), socialIntegration.getNetworkName(), res ^ 1);
                             notifyItemChanged(position);
                         }
                     }
