@@ -30,6 +30,7 @@ import com.vk.sdk.util.VKUtil;
 import java.io.File;
 import java.io.IOException;
 
+import ru.ifmo.droid2016.korchagin.multicheckin.integration.OkIntegration;
 import ru.ifmo.droid2016.korchagin.multicheckin.integration.SendToAllJob;
 import ru.ifmo.droid2016.korchagin.multicheckin.utils.BitmapFileUtil;
 
@@ -189,6 +190,18 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String defaultComment = prefs.getString("step2_default_pref", null);
+
+        if(defaultComment != null && defaultComment.length() > 0){
+            commentText.setHint(defaultComment + "(Your default message)");
+        }
+    }
+
     public void selectPhotoFromFile(View v) {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
@@ -274,5 +287,11 @@ public class MainActivity extends AppCompatActivity  {
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+    public void clickOk(View view) {
+        OkIntegration.getInstance().sendPhotosForJob(null, "", 0);
+    }
+
 
 }

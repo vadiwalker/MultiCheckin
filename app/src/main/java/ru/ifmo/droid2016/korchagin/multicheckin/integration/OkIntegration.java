@@ -106,10 +106,10 @@ public class OkIntegration implements SocialIntegration {
 
 
                     HashMap<String, String> map = new HashMap<>();
-                    map.put("st.type", "user");
                     map.put("st.app", APP_ID);
-                    map.put("st.attachment", OkEncryptUtil.toMD5(attack + SECRET_KEY));
+                    map.put("st.attachment", attack);
                     map.put("st.access_token", access_token);
+                    map.put("st.signature", OkEncryptUtil.toMD5(attack + SECRET_KEY));
 
                     String callback = OkRequestUtil.executeRequest(map);
                     Log.d(TAG, "answer on request: " + callback);
